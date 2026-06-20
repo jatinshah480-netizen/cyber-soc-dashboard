@@ -1,0 +1,2393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cybersecurity Simulator & Training Center</title>
+  <meta name="description" content="Interactive Cybersecurity Training Simulator covering Log Review, Vulnerability Management, Incident Response, Identity Control, and Security Training.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ────────────────────────────────────────────────────────────
+       1. Core Styling & Design System
+       ──────────────────────────────────────────────────────────── */
+    :root {
+      --bg-primary: #050811;
+      --bg-secondary: #0a0f1d;
+      --bg-card: rgba(255, 255, 255, 0.03);
+      --bg-card-hover: rgba(255, 255, 255, 0.06);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      
+      /* Neon Accent Palette */
+      --cyan: #00e5ff;
+      --green: #00e676;
+      --amber: #ffab00;
+      --red: #ff1744;
+      --purple: #d500f9;
+      
+      /* Glow Translucents */
+      --cyan-glow: rgba(0, 229, 255, 0.15);
+      --green-glow: rgba(0, 230, 118, 0.15);
+      --amber-glow: rgba(255, 171, 0, 0.15);
+      --red-glow: rgba(255, 23, 68, 0.15);
+      --purple-glow: rgba(213, 0, 249, 0.15);
+      
+      --text-primary: rgba(255, 255, 255, 0.95);
+      --text-secondary: rgba(255, 255, 255, 0.70);
+      --text-muted: rgba(255, 255, 255, 0.45);
+      
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --speed-base: 0.3s;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(0, 229, 255, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(213, 0, 249, 0.05) 0%, transparent 40%);
+    }
+
+    /* ─── Layout ─── */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      font-size: 2rem;
+    }
+
+    .brand-text h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(90deg, var(--cyan), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-text p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-card);
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .user-profile label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .user-name-input {
+      background: transparent;
+      border: none;
+      color: var(--cyan);
+      font-weight: 600;
+      font-size: 0.875rem;
+      outline: none;
+      border-bottom: 1px dashed var(--text-muted);
+      padding-bottom: 2px;
+      width: 120px;
+    }
+
+    .user-name-input:focus {
+      border-bottom-color: var(--cyan);
+    }
+
+    /* ─── Dashboard Stats & Progress ─── */
+    .progress-bar-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-bar-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--purple));
+      opacity: 0.7;
+    }
+
+    .progress-info {
+      flex-shrink: 0;
+    }
+
+    .progress-info h2 {
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .progress-info p {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      border-radius: var(--radius-pill);
+      box-shadow: 0 0 12px var(--cyan-glow);
+      transition: width 0.6s var(--ease-out);
+    }
+
+    .progress-percent {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--green);
+      font-variant-numeric: tabular-nums;
+      min-width: 60px;
+      text-align: right;
+    }
+
+    /* ─── Grid: Missions & Game Board ─── */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      flex: 1;
+    }
+
+    @media (max-width: 992px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Missions Sidebar */
+    .missions-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .sidebar-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 4px;
+    }
+
+    .mission-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: pointer;
+      transition: all var(--speed-base) var(--ease-out);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mission-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--text-muted);
+      opacity: 0.3;
+      transition: all var(--speed-base) ease;
+    }
+
+    .mission-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .mission-card.active {
+      background: rgba(0, 229, 255, 0.04);
+      border-color: rgba(0, 229, 255, 0.25);
+      box-shadow: inset 0 0 16px rgba(0, 229, 255, 0.02);
+    }
+
+    .mission-card.active::before {
+      background: var(--cyan);
+      opacity: 1;
+      box-shadow: 0 0 8px var(--cyan);
+    }
+
+    .mission-card.completed::before {
+      background: var(--green);
+      opacity: 1;
+      box-shadow: 0 0 8px var(--green);
+    }
+
+    .mission-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mission-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mission-number {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      font-family: 'Fira Code', monospace;
+    }
+
+    .mission-name {
+      font-weight: 600;
+      font-size: 0.9375rem;
+    }
+
+    .mission-status-badge {
+      font-size: 0.625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .mission-card.completed .mission-status-badge {
+      background: rgba(0, 230, 118, 0.1);
+      color: var(--green);
+      border-color: rgba(0, 230, 118, 0.2);
+    }
+
+    .mission-card.active .mission-status-badge:not(.completed) {
+      background: rgba(0, 229, 255, 0.1);
+      color: var(--cyan);
+      border-color: rgba(0, 229, 255, 0.2);
+    }
+
+    .mission-description {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* Game Play Area */
+    .game-board {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      position: relative;
+      min-height: 520px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .game-board-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 16px;
+    }
+
+    .game-board-title h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .game-board-title p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    /* ─── Buttons ─── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all var(--speed-base) var(--ease-out);
+      border: 1px solid transparent;
+      outline: none;
+    }
+
+    .btn-primary {
+      background: var(--cyan);
+      color: var(--bg-primary);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 16px var(--cyan-glow);
+      background: #33ebff;
+    }
+
+    .btn-primary:disabled {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      border-color: var(--border-subtle);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-success {
+      background: var(--green);
+      color: var(--bg-primary);
+    }
+
+    .btn-success:hover {
+      box-shadow: 0 0 16px var(--green-glow);
+      background: #33f091;
+    }
+
+    .btn-danger {
+      background: var(--red);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      box-shadow: 0 0 16px var(--red-glow);
+      background: #ff4066;
+    }
+
+    /* ─── Terminal Theme (Mission 1 & 3) ─── */
+    .terminal {
+      background: #02040a;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8125rem;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    }
+
+    .terminal-header {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .terminal-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .terminal-dot.red { background: var(--red); }
+    .terminal-dot.yellow { background: var(--amber); }
+    .terminal-dot.green { background: var(--green); }
+
+    .terminal-title {
+      font-size: 0.6875rem;
+      color: var(--text-muted);
+      margin-left: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .terminal-body {
+      padding: 16px;
+      overflow-y: auto;
+      max-height: 320px;
+    }
+
+    /* ────────────────────────────────────────────────────────────
+       MISSION 1: Log Review UI
+       ──────────────────────────────────────────────────────────── */
+    .log-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .log-item {
+      display: flex;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      user-select: none;
+      align-items: flex-start;
+      line-height: 1.4;
+    }
+
+    .log-item:hover {
+      background: rgba(255, 255, 255, 0.02);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .log-item.selected {
+      background: rgba(255, 171, 0, 0.05);
+      border-color: rgba(255, 171, 0, 0.25);
+    }
+
+    .log-checkbox {
+      width: 14px;
+      height: 14px;
+      margin-top: 3px;
+      border: 1px solid var(--text-muted);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.625rem;
+      color: var(--bg-primary);
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+
+    .log-item.selected .log-checkbox {
+      background: var(--amber);
+      border-color: var(--amber);
+      box-shadow: 0 0 6px var(--amber-glow);
+    }
+
+    .log-item.selected .log-checkbox::after {
+      content: '✓';
+      color: #000;
+      font-weight: 800;
+    }
+
+    .log-content {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .log-time {
+      color: var(--text-muted);
+      margin-right: 8px;
+    }
+
+    .log-msg-critical { color: var(--red); }
+    .log-msg-warning { color: var(--amber); }
+    .log-msg-info { color: var(--text-secondary); }
+
+    /* Feedback Overlay */
+    .mission-feedback {
+      padding: 16px;
+      border-radius: var(--radius-md);
+      margin-top: 16px;
+      display: none;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    .mission-feedback.success {
+      display: block;
+      background: rgba(0, 230, 118, 0.06);
+      border: 1px solid rgba(0, 230, 118, 0.25);
+      color: var(--green);
+    }
+
+    .mission-feedback.error {
+      display: block;
+      background: rgba(255, 23, 68, 0.06);
+      border: 1px solid rgba(255, 23, 68, 0.25);
+      color: var(--red);
+    }
+
+    /* ────────────────────────────────────────────────────────────
+       MISSION 2: Vulnerability Management UI
+       ──────────────────────────────────────────────────────────── */
+    .vuln-board {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .vuln-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 20px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .vuln-item {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .vuln-details {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .vuln-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .vuln-cve {
+      font-family: 'Fira Code', monospace;
+      font-weight: 600;
+      color: var(--cyan);
+      font-size: 0.8125rem;
+    }
+
+    .vuln-severity {
+      font-size: 0.625rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .vuln-severity.critical { background: rgba(255, 23, 68, 0.15); color: var(--red); }
+    .vuln-severity.high { background: rgba(255, 171, 0, 0.15); color: var(--amber); }
+    .vuln-severity.medium { background: rgba(0, 229, 255, 0.15); color: var(--cyan); }
+
+    .vuln-description {
+      font-size: 0.875rem;
+      color: var(--text-primary);
+    }
+
+    .patch-selector {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s ease;
+      font-size: 0.8125rem;
+    }
+
+    .patch-selector:focus {
+      border-color: var(--cyan);
+    }
+
+    .scan-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 280px;
+      gap: 16px;
+    }
+
+    .scan-radar {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 2px solid rgba(0, 229, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scan-radar::before {
+      content: '';
+      position: absolute;
+      width: 90%;
+      height: 90%;
+      border-radius: 50%;
+      border: 1px dashed rgba(0, 229, 255, 0.4);
+    }
+
+    .scan-sweep {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--cyan-glow) 0%, transparent 60%);
+      animation: sweep 2s linear infinite;
+      display: none;
+    }
+
+    @keyframes sweep {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* ────────────────────────────────────────────────────────────
+       MISSION 3: Incident Response UI
+       ──────────────────────────────────────────────────────────── */
+    .ir-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .ir-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .ir-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ir-action-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .ir-action-card.disabled {
+      opacity: 0.5;
+    }
+
+    .ir-action-card.completed {
+      border-color: rgba(0, 230, 118, 0.25);
+      background: rgba(0, 230, 118, 0.03);
+    }
+
+    .ir-action-info h3 {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .ir-action-info p {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .ir-status-sidebar {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .ir-stat-bar-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .ir-stat-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .ir-stat-track {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+    }
+
+    .ir-stat-fill {
+      height: 100%;
+      border-radius: var(--radius-pill);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .ir-stat-fill.health {
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green-glow);
+    }
+
+    .ir-stat-fill.threat {
+      background: var(--red);
+      box-shadow: 0 0 10px var(--red-glow);
+    }
+
+    .ir-log-terminal {
+      height: 180px;
+      font-size: 0.75rem;
+    }
+
+    /* ────────────────────────────────────────────────────────────
+       MISSION 4: Identity Control UI
+       ──────────────────────────────────────────────────────────── */
+    .id-table-wrapper {
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-card);
+    }
+
+    .id-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.8125rem;
+    }
+
+    .id-table th, .id-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .id-table th {
+      background: rgba(255, 255, 255, 0.02);
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      font-size: 0.6875rem;
+      letter-spacing: 0.05em;
+    }
+
+    .id-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .id-table tr.flagged {
+      background: rgba(255, 23, 68, 0.02);
+    }
+
+    .user-principal {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .user-alias {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .user-email {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: 'Fira Code', monospace;
+    }
+
+    .mfa-status-pill {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      display: inline-block;
+    }
+
+    .mfa-status-pill.enabled {
+      background: rgba(0, 230, 118, 0.1);
+      color: var(--green);
+      border: 1px solid rgba(0, 230, 118, 0.2);
+    }
+
+    .mfa-status-pill.disabled {
+      background: rgba(255, 23, 68, 0.1);
+      color: var(--red);
+      border: 1px solid rgba(255, 23, 68, 0.2);
+    }
+
+    .user-activity {
+      font-size: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .user-activity.warning {
+      color: var(--amber);
+      font-weight: 500;
+    }
+
+    .user-activity.critical {
+      color: var(--red);
+      font-weight: 600;
+    }
+
+    .id-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    /* Switch Style Toggle */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 36px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255,255,255,0.1);
+      transition: .3s;
+      border-radius: 20px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 12px;
+      width: 12px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--text-muted);
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--green);
+      border-color: rgba(0, 230, 118, 0.3);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(16px);
+      background-color: var(--bg-primary);
+    }
+
+    /* ────────────────────────────────────────────────────────────
+       MISSION 5: Security Training UI
+       ──────────────────────────────────────────────────────────── */
+    .phish-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 20px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-card);
+      height: 380px;
+    }
+
+    @media (max-width: 768px) {
+      .phish-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+    }
+
+    .phish-sidebar {
+      background: rgba(255, 255, 255, 0.01);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .phish-sidebar-header {
+      padding: 12px 16px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .email-item {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .email-item:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .email-item.active {
+      background: rgba(0, 229, 255, 0.05);
+      border-left: 3px solid var(--cyan);
+    }
+
+    .email-item.completed {
+      border-left-color: var(--green);
+    }
+
+    .email-item-sender {
+      font-weight: 600;
+      font-size: 0.8125rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .email-item-subject {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .email-item-status {
+      font-size: 0.625rem;
+      font-weight: 700;
+      align-self: flex-start;
+      margin-top: 2px;
+    }
+
+    .email-pane {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .email-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.01);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .email-meta-row {
+      display: flex;
+      font-size: 0.8125rem;
+    }
+
+    .email-meta-label {
+      width: 70px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .email-meta-val {
+      color: var(--text-primary);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+    }
+
+    .email-body-area {
+      padding: 24px;
+      flex: 1;
+      overflow-y: auto;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      background: var(--bg-secondary);
+    }
+
+    .email-actions-bar {
+      padding: 16px;
+      border-top: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.02);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .email-verdict-note {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      margin-right: auto;
+    }
+
+    .email-body-text {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-top: 12px;
+    }
+
+    .email-link-mock {
+      color: var(--cyan);
+      text-decoration: underline;
+      cursor: help;
+      display: inline-block;
+      position: relative;
+    }
+
+    .email-link-mock:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #000;
+      border: 1px solid var(--border-subtle);
+      color: var(--amber);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.6875rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      z-index: 10;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    /* ─── CERTIFICATE VIEW UI ─── */
+    .cert-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      text-align: center;
+      padding: 32px;
+    }
+
+    .cert-badge-glow {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--cyan-glow) 0%, transparent 70%);
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+
+    .cert-shield-svg {
+      width: 80px;
+      height: 80px;
+      filter: drop-shadow(0 0 16px var(--cyan));
+      fill: none;
+      stroke: var(--cyan);
+      stroke-width: 2;
+    }
+
+    .cert-frame {
+      background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+      border: 8px double rgba(0, 229, 255, 0.3);
+      padding: 40px;
+      border-radius: var(--radius-lg);
+      max-width: 680px;
+      width: 100%;
+      position: relative;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 0 30px var(--cyan-glow);
+    }
+
+    .cert-frame-inner {
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .cert-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .cert-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .cert-recipient {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--cyan);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 32px;
+      margin: 12px 0;
+      display: inline-block;
+      text-shadow: 0 0 8px var(--cyan-glow);
+    }
+
+    .cert-text {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 500px;
+    }
+
+    .cert-date {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      margin-top: 16px;
+    }
+
+    .cert-signature-row {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 24px;
+      padding: 0 32px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding-top: 16px;
+    }
+
+    .cert-sig {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .cert-sig-val {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--cyan);
+    }
+
+    .cert-sig-label {
+      font-size: 0.625rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-subtle);
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <span class="brand-icon">🛡️</span>
+        <div class="brand-text">
+          <h1>Cybersecurity Mission Control</h1>
+          <p>Training & Interactive Simulator</p>
+        </div>
+      </div>
+      <div class="user-profile">
+        <label for="userName">Agent Profile:</label>
+        <input type="text" id="userName" class="user-name-input" value="Agent_Guest" placeholder="Enter name">
+      </div>
+    </header>
+
+    <!-- Overall Progress -->
+    <section class="progress-bar-wrapper">
+      <div class="progress-info">
+        <h2>Overall Simulation Progress</h2>
+        <p id="progressLabel">0 of 5 security operations completed</p>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="overallProgressFill"></div>
+      </div>
+      <div class="progress-percent" id="overallProgressText">0%</div>
+    </section>
+
+    <!-- Main Grid Workspace -->
+    <div class="dashboard-grid">
+      
+      <!-- Left Panel: Navigation Missions -->
+      <aside class="missions-sidebar">
+        <span class="sidebar-title">Operations Dashboard</span>
+        
+        <!-- Mission 1 -->
+        <div class="mission-card active" id="card_logReview" onclick="switchMission('logReview')">
+          <div class="mission-header">
+            <div class="mission-title-group">
+              <span class="mission-number">OP-01</span>
+              <span class="mission-name">Log Review</span>
+            </div>
+            <span class="mission-status-badge" id="badge_logReview">Active</span>
+          </div>
+          <p class="mission-description">Analyze overnight system syslog files and automated alert feeds to identify indicators of compromise.</p>
+        </div>
+
+        <!-- Mission 2 -->
+        <div class="mission-card" id="card_vulnMgmt" onclick="switchMission('vulnMgmt')">
+          <div class="mission-header">
+            <div class="mission-title-group">
+              <span class="mission-number">OP-02</span>
+              <span class="mission-name">Vulnerability Mgmt</span>
+            </div>
+            <span class="mission-status-badge" id="badge_vulnMgmt">Locked</span>
+          </div>
+          <p class="mission-description">Initiate active vulnerability scanning on host web applications and deploy remediation patches.</p>
+        </div>
+
+        <!-- Mission 3 -->
+        <div class="mission-card" id="card_incidentResponse" onclick="switchMission('incidentResponse')">
+          <div class="mission-header">
+            <div class="mission-title-group">
+              <span class="mission-number">OP-03</span>
+              <span class="mission-name">Incident Response</span>
+            </div>
+            <span class="mission-status-badge" id="badge_incidentResponse">Locked</span>
+          </div>
+          <p class="mission-description">Mitigate a live, active ransomware attack spreading inside the enterprise servers in real-time.</p>
+        </div>
+
+        <!-- Mission 4 -->
+        <div class="mission-card" id="card_identityControl" onclick="switchMission('identityControl')">
+          <div class="mission-header">
+            <div class="mission-title-group">
+              <span class="mission-number">OP-04</span>
+              <span class="mission-name">Identity Control</span>
+            </div>
+            <span class="mission-status-badge" id="badge_identityControl">Locked</span>
+          </div>
+          <p class="mission-description">Review IAM directory privileges and force multi-factor authentication (MFA) on flagged profiles.</p>
+        </div>
+
+        <!-- Mission 5 -->
+        <div class="mission-card" id="card_securityTraining" onclick="switchMission('securityTraining')">
+          <div class="mission-header">
+            <div class="mission-title-group">
+              <span class="mission-number">OP-05</span>
+              <span class="mission-name">Security Training</span>
+            </div>
+            <span class="mission-status-badge" id="badge_securityTraining">Locked</span>
+          </div>
+          <p class="mission-description">Conduct phishing analyst drills to identify social engineering email vectors.</p>
+        </div>
+      </aside>
+
+      <!-- Right Panel: Interactive Active Simulator View -->
+      <main class="game-board" id="gameBoard">
+        
+        <!-- ============================================================
+             MISSION 1 VIEW: Log Review Console
+             ============================================================ -->
+        <div class="mission-panel" id="panel_logReview" style="display: block;">
+          <div class="game-board-header">
+            <div class="game-board-title">
+              <h2>📖 Log Review Simulation</h2>
+              <p>Review the overnight firewall, authentication, and intrusion logs below. Check and flag exactly <strong>3 suspicious alerts</strong>.</p>
+            </div>
+            <button class="btn btn-primary" onclick="validateLogReview()">Submit Analysis</button>
+          </div>
+
+          <div class="terminal" style="margin-top: 20px;">
+            <div class="terminal-header">
+              <span class="terminal-dot red"></span>
+              <span class="terminal-dot yellow"></span>
+              <span class="terminal-dot green"></span>
+              <span class="terminal-title">syslog@corp-siem-collector</span>
+            </div>
+            <div class="terminal-body">
+              <div class="log-list" id="logListContainer">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+
+          <div class="mission-feedback" id="feedback_logReview"></div>
+        </div>
+
+        <!-- ============================================================
+             MISSION 2 VIEW: Vulnerability Management
+             ============================================================ -->
+        <div class="mission-panel" id="panel_vulnMgmt" style="display: none;">
+          <div class="game-board-header">
+            <div class="game-board-title">
+              <h2>🔍 Vulnerability Management</h2>
+              <p>Run a software vulnerabilities check across your environments, then assign the correct patch to fix each weakness.</p>
+            </div>
+            <button class="btn btn-primary" id="runScanBtn" onclick="triggerVulnScan()">Run Vulnerability Scan</button>
+          </div>
+
+          <!-- Scan Screen / Radar Animation -->
+          <div class="scan-screen" id="vulnScanScreen">
+            <div class="scan-radar">
+              <div class="scan-sweep" id="scanSweep"></div>
+              <span>📡</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.875rem;" id="scanStatusText">Vulnerability database idle. Click button to begin.</p>
+          </div>
+
+          <!-- Vulnerabilities List & Patch Selectors -->
+          <div class="vuln-board" id="vulnBoard" style="display: none;">
+            <!-- Dynamically populated -->
+            <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+              <button class="btn btn-success" onclick="validateVulnPatches()">Apply Remediation Patches</button>
+            </div>
+          </div>
+
+          <div class="mission-feedback" id="feedback_vulnMgmt"></div>
+        </div>
+
+        <!-- ============================================================
+             MISSION 3 VIEW: Incident Response
+             ============================================================ -->
+        <div class="mission-panel" id="panel_incidentResponse" style="display: none;">
+          <div class="game-board-header">
+            <div class="game-board-title">
+              <h2>🚨 Incident Response Active Defense</h2>
+              <p>CRITICAL ALERT: Ransomware payload is spreading laterally. Execute the mitigations in the correct sequence to save the database.</p>
+            </div>
+            <button class="btn btn-danger" id="startIrBtn" onclick="startIncidentResponse()">Initiate Emergency Protocol</button>
+          </div>
+
+          <div class="ir-grid" style="margin-top: 20px;">
+            <div class="ir-controls">
+              <!-- Action 1 -->
+              <div class="ir-action-card disabled" id="ir_card_1">
+                <div class="ir-action-info">
+                  <h3>1. Isolate Infected Server</h3>
+                  <p>Isolate 'DB-PROD-02' workstation from the network gateway to halt spread.</p>
+                </div>
+                <button class="btn btn-secondary btn-sm" id="ir_btn_1" onclick="executeIrStep(1)" disabled>Isolate</button>
+              </div>
+
+              <!-- Action 2 -->
+              <div class="ir-action-card disabled" id="ir_card_2">
+                <div class="ir-action-info">
+                  <h3>2. Disable Compromised Service Account</h3>
+                  <p>Revoke credentials for the compromised Active Directory billing-api service.</p>
+                </div>
+                <button class="btn btn-secondary btn-sm" id="ir_btn_2" onclick="executeIrStep(2)" disabled>Disable</button>
+              </div>
+
+              <!-- Action 3 -->
+              <div class="ir-action-card disabled" id="ir_card_3">
+                <div class="ir-action-info">
+                  <h3>3. Deploy EDR Block Rule</h3>
+                  <p>Deploy Endpoint Detection & Response blocking signature for Ransomware.exe.</p>
+                </div>
+                <button class="btn btn-secondary btn-sm" id="ir_btn_3" onclick="executeIrStep(3)" disabled>Deploy</button>
+              </div>
+
+              <!-- Action 4 -->
+              <div class="ir-action-card disabled" id="ir_card_4">
+                <div class="ir-action-info">
+                  <h3>4. Restore Systems from Backups</h3>
+                  <p>Deploy restoration scripts using offline secure encrypted disk snapshots.</p>
+                </div>
+                <button class="btn btn-secondary btn-sm" id="ir_btn_4" onclick="executeIrStep(4)" disabled>Restore</button>
+              </div>
+            </div>
+
+            <!-- Health Status -->
+            <div class="ir-status-sidebar">
+              <div class="ir-stat-bar-group">
+                <div class="ir-stat-label-row">
+                  <span>System Integrity Health</span>
+                  <span id="irHealthVal">100%</span>
+                </div>
+                <div class="ir-stat-track">
+                  <div class="ir-stat-fill health" id="irHealthBar" style="width: 100%"></div>
+                </div>
+              </div>
+
+              <div class="ir-stat-bar-group">
+                <div class="ir-stat-label-row">
+                  <span>Infection Spread Rate</span>
+                  <span id="irThreatVal">0%</span>
+                </div>
+                <div class="ir-stat-track">
+                  <div class="ir-stat-fill threat" id="irThreatBar" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <div class="terminal ir-log-terminal">
+                <div class="terminal-header">
+                  <span class="terminal-dot red"></span>
+                  <span class="terminal-dot yellow"></span>
+                  <span class="terminal-dot green"></span>
+                  <span class="terminal-title">ir-agent@soc-console</span>
+                </div>
+                <div class="terminal-body" id="irConsole" style="font-family: monospace; font-size: 0.7rem; color: var(--green);">
+                  [SYSTEM] Waiting for emergency protocol initiation...
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mission-feedback" id="feedback_incidentResponse"></div>
+        </div>
+
+        <!-- ============================================================
+             MISSION 4 VIEW: Identity Control (IAM)
+             ============================================================ -->
+        <div class="mission-panel" id="panel_identityControl" style="display: none;">
+          <div class="game-board-header">
+            <div class="game-board-title">
+              <h2>🔑 Identity Control & Access Management</h2>
+              <p>Audit employee access privileges. Turn <strong>ON</strong> MFA or suspend profiles that violate standard security baseline policies.</p>
+            </div>
+            <button class="btn btn-primary" onclick="validateIdentityControl()">Enforce IAM Policy</button>
+          </div>
+
+          <div class="id-table-wrapper" style="margin-top: 20px;">
+            <table class="id-table">
+              <thead>
+                <tr>
+                  <th>User Profile</th>
+                  <th>Role</th>
+                  <th>MFA Enforced</th>
+                  <th>Recent Activity Log</th>
+                  <th>Access Management Actions</th>
+                </tr>
+              </thead>
+              <tbody id="iamTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mission-feedback" id="feedback_identityControl"></div>
+        </div>
+
+        <!-- ============================================================
+             MISSION 5 VIEW: Security Training Quiz
+             ============================================================ -->
+        <div class="mission-panel" id="panel_securityTraining" style="display: none;">
+          <div class="game-board-header">
+            <div class="game-board-title">
+              <h2>📧 Security Awareness Training</h2>
+              <p>Review the emails incoming to corporate employees. Flag each email as either <strong>Phishing</strong> or <strong>Safe</strong>.</p>
+            </div>
+            <button class="btn btn-primary" onclick="validateSecurityTraining()">Submit Verdicts</button>
+          </div>
+
+          <div class="phish-layout" style="margin-top: 20px;">
+            <!-- Left panel list of emails -->
+            <div class="phish-sidebar">
+              <div class="phish-sidebar-header">Inbox Queue</div>
+              <div id="emailListContainer">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- Right panel email viewer -->
+            <div class="email-pane" id="emailPane">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <div class="mission-feedback" id="feedback_securityTraining"></div>
+        </div>
+
+        <!-- ============================================================
+             CERTIFICATION CELEBRATION VIEW
+             ============================================================ -->
+        <div class="mission-panel" id="panel_certification" style="display: none;">
+          <div class="cert-screen">
+            <div class="cert-badge-glow">
+              <svg class="cert-shield-svg" viewBox="0 0 24 24">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <polyline points="9 11 11 13 15 9" />
+              </svg>
+            </div>
+            
+            <div class="cert-frame">
+              <div class="cert-frame-inner">
+                <span class="cert-subtitle">Cybersecurity Operations Center</span>
+                <h2 class="cert-title">Specialist Certification</h2>
+                <p style="color: var(--text-muted); font-size: 0.75rem;">This document verifies completion of operational tactical simulations</p>
+                
+                <span class="cert-recipient" id="certRecipient">Agent_Name</span>
+                
+                <p class="cert-text">
+                  Has successfully analyzed, triaged, and remediated cybersecurity incidents including Log Analysis, Vulnerability Patching, Real-time Incident Response, Identity Governance (MFA Control), and Phishing Threat Audits.
+                </p>
+                
+                <span class="cert-date" id="certDate">Date: June 19, 2026</span>
+                
+                <div class="cert-signature-row">
+                  <div class="cert-sig">
+                    <span class="cert-sig-val">SYSTEM_COMPLIANCE_PASS</span>
+                    <span class="cert-sig-label">Certification Status</span>
+                  </div>
+                  <div class="cert-sig">
+                    <span class="cert-sig-val" style="font-family: 'Fira Code', monospace; letter-spacing: -1px;">🛡️ SOC_CMD_AGENT</span>
+                    <span class="cert-sig-label">Authorized Signature</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-success" onclick="window.print()">🖨️ Print Certificate</button>
+          </div>
+        </div>
+
+      </main>
+
+    </div>
+
+  </div>
+
+  <footer>
+    <p>SOC Simulation Hub &bull; Cybersecurity Training Framework &bull; Strictly for Educational Operations</p>
+  </footer>
+
+  <!-- ────────────────────────────────────────────────────────────
+       3. JavaScript Application Engine
+       ──────────────────────────────────────────────────────────── */
+  <script>
+    // Global State management
+    const appState = {
+      user: "Agent_Guest",
+      currentMission: "logReview",
+      completedMissions: {
+        logReview: false,
+        vulnMgmt: false,
+        incidentResponse: false,
+        identityControl: false,
+        securityTraining: false
+      },
+      // Mission 1 states
+      logs: [
+        { id: 0, text: "[INFO] System health check completed. All services reporting green status.", isAnomalous: false },
+        { id: 1, text: "[CRITICAL] Impossible travel detected: User jdoe@corp.local authenticated from New York, USA and Tokyo, Japan within 12 minutes.", isAnomalous: true, reason: "Impossible travel indicates compromised credentials." },
+        { id: 2, text: "[INFO] DHCP lease renewed for client host WS-0418 (10.0.12.44) on subnet VLAN 10.", isAnomalous: false },
+        { id: 3, text: "[WARNING] Outbound HTTP connection: host WS-0222 established web request to local proxy server.", isAnomalous: false },
+        { id: 4, text: "[CRITICAL] SQL injection attempt: HTTP GET /api/v1/users?id=1%20UNION%20SELECT%20username,password_hash%20FROM%20users on DB-PROD-01.", isAnomalous: true, reason: "SQL Injection exploits web input flaws to leak database contents." },
+        { id: 5, text: "[INFO] Remote desktop protocol (RDP) session established for admin_mgr from jumpbox console.", isAnomalous: false },
+        { id: 6, text: "[WARNING] Anomalous execution: PowerShell script executed with hidden window and Base64 encoded payload downloading executable shellcode.", isAnomalous: true, reason: "PowerShell scripts with hidden base64 windows represent execution bypass indicators." },
+        { id: 7, text: "[INFO] Successful login for user jsmith@corp.local via Google Authenticator MFA verification.", isAnomalous: false },
+        { id: 8, text: "[INFO] Email quarantine container cleaned: 14 spam messages purged by gateway system.", isAnomalous: false },
+        { id: 9, text: "[INFO] Nightly database snapshot successfully synced to secure S3 target cloud server.", isAnomalous: false }
+      ],
+      selectedLogs: new Set(),
+      
+      // Mission 2 states
+      scanRun: false,
+      vulns: [
+        { cve: "CVE-2026-31337", severity: "critical", desc: "Remote Code Execution (RCE) in Apache Tomcat web server headers parsing logic.", patchOption: "A", status: "Unresolved" },
+        { cve: "CVE-2025-44219", severity: "high", desc: "Information Disclosure via TLS SSL handshake downgrade negotiation settings.", patchOption: "C", status: "Unresolved" },
+        { cve: "CVE-2026-11842", severity: "medium", desc: "Missing security baseline response headers: Content-Security-Policy (CSP).", patchOption: "B", status: "Unresolved" }
+      ],
+      patches: {
+        A: "Upgrade Apache Tomcat web engine package from v9.0.37 to version v9.0.41",
+        B: "Deploy CSP rules: Add server response header 'Content-Security-Policy: default-src self'",
+        C: "SSL Update: Upgrade SSL configuration parameters to require TLS 1.3 only"
+      },
+      selectedPatches: { 0: "", 1: "", 2: "" },
+
+      // Mission 3 states
+      irTimer: null,
+      irProgress: 0,
+      irHealth: 100,
+      irStep: 1, // 1 to 4 sequential steps
+      irRunning: false,
+
+      // Mission 4 states
+      iamUsers: [
+        { id: 0, user: "admin_svc", role: "Admin Service Account", mfa: false, activity: "75 failed login attempts from external IP block 203.0.113.88", actionRequired: "mfa", isAnomalous: true, secured: false },
+        { id: 1, user: "bsmith@corp.local", role: "HR Representative", mfa: true, activity: "Downloaded benefit guides from internal share (Normal)", actionRequired: "none", isAnomalous: false, secured: true },
+        { id: 2, user: "vpn_gateway", role: "External VPN Gateway", mfa: false, activity: "Authenticated from New York, London, and Berlin in 90 minutes", actionRequired: "mfa", isAnomalous: true, secured: false },
+        { id: 3, user: "jdoe@corp.local", role: "Financial Auditor", mfa: true, activity: "Generated tax compliance report for current quarter (Normal)", actionRequired: "none", isAnomalous: false, secured: true },
+        { id: 4, user: "dev_user", role: "Temporary Contractor", mfa: false, activity: "Executing administrator terminal utilities outside working hours", actionRequired: "suspend", isAnomalous: true, secured: false }
+      ],
+
+      // Mission 5 states
+      emails: [
+        { id: 0, sender: "helpdesk-alerts@microsoft-update-security.com", realSender: "spammer-ip@malicious-redirector.info", subject: "URGENT: Corporate account password expired", body: "Please click the link below to verify your corporate credentials and prevent immediate account termination.", linkText: "Reset Password Link", actualLink: "http://login.microsoft.webportal-verify.com/reset", isPhishing: true, userVerdict: null },
+        { id: 1, sender: "no-reply@corp.local", realSender: "mailer-daemon@corp.local", subject: "Annual Employee Benefits Open Enrollment", body: "The portal for benefits registration is active. Complete your benefits allocations before next Friday using the HR intranet portal.", linkText: "Access HR Benefits Portal", actualLink: "https://hr.corp.local/benefits/enroll", isPhishing: false, userVerdict: null },
+        { id: 2, sender: "fedex-tracking@shipment-delivery-express.com", realSender: "phisher@deliverysvc-tracker-port.net", subject: "Delivery Failure Notice: Verify Address Details", body: "Your package with tracking number #498218 could not be delivered due to incorrect street number. Confirm your street address immediately.", linkText: "Verify Shipping Information", actualLink: "http://fedex.tracking-details-verify.com/delivery", isPhishing: true, userVerdict: null }
+      ],
+      activeEmailIndex: 0
+    };
+
+    // Initialize App
+    document.addEventListener("DOMContentLoaded", () => {
+      // Set default date
+      const dateEl = document.getElementById("certDate");
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      dateEl.textContent = "Date: " + new Date().toLocaleDateString('en-US', options);
+
+      // Name inputs
+      const nameInput = document.getElementById("userName");
+      nameInput.addEventListener("input", (e) => {
+        appState.user = e.target.value || "Agent_Guest";
+        document.getElementById("certRecipient").textContent = appState.user;
+      });
+      document.getElementById("certRecipient").textContent = appState.user;
+
+      // Populate Mission 1
+      renderLogReview();
+      
+      // Populate Mission 4
+      renderIdentityControl();
+
+      // Populate Mission 5
+      renderSecurityTraining();
+    });
+
+    // ────────────────────────────────────────────────────────────
+    // Switch between panels
+    // ────────────────────────────────────────────────────────────
+    function switchMission(missionKey) {
+      // If the mission is locked (not completed and preceding not completed)
+      if (!isMissionUnlocked(missionKey)) {
+        alert("Operation Locked. Complete previous cybersecurity tasks first.");
+        return;
+      }
+
+      appState.currentMission = missionKey;
+      
+      // Hide all panels
+      const panels = document.querySelectorAll('.mission-panel');
+      panels.forEach(p => p.style.display = 'none');
+
+      // Show selected panel
+      document.getElementById(`panel_${missionKey}`).style.display = 'block';
+
+      // Update sidebar visual indicator
+      const cards = document.querySelectorAll('.mission-card');
+      cards.forEach(c => c.classList.remove('active'));
+      document.getElementById(`card_${missionKey}`).classList.add('active');
+
+      // Specific panel setup
+      if (missionKey === 'vulnMgmt') {
+        renderVulnBoard();
+      }
+    }
+
+    function isMissionUnlocked(missionKey) {
+      const keys = ["logReview", "vulnMgmt", "incidentResponse", "identityControl", "securityTraining"];
+      const index = keys.indexOf(missionKey);
+      if (index === 0) return true;
+      
+      // Previous mission must be completed to unlock
+      const prevKey = keys[index - 1];
+      return appState.completedMissions[prevKey];
+    }
+
+    function updateOverallProgress() {
+      const keys = ["logReview", "vulnMgmt", "incidentResponse", "identityControl", "securityTraining"];
+      let completedCount = 0;
+      keys.forEach(k => {
+        if (appState.completedMissions[k]) {
+          completedCount++;
+          document.getElementById(`badge_${k}`).textContent = "Completed";
+          document.getElementById(`badge_${k}`).className = "mission-status-badge completed";
+          document.getElementById(`card_${k}`).classList.add('completed');
+        } else {
+          const isUnlocked = isMissionUnlocked(k);
+          document.getElementById(`badge_${k}`).textContent = isUnlocked ? "Active" : "Locked";
+          document.getElementById(`badge_${k}`).className = isUnlocked ? "mission-status-badge active" : "mission-status-badge";
+        }
+      });
+
+      const pct = Math.round((completedCount / 5) * 100);
+      document.getElementById("overallProgressFill").style.width = `${pct}%`;
+      document.getElementById("overallProgressText").textContent = `${pct}%`;
+      document.getElementById("progressLabel").textContent = `${completedCount} of 5 security operations completed`;
+
+      // Check if all are completed
+      if (completedCount === 5) {
+        setTimeout(() => {
+          alert("CONGRATULATIONS AGENT! You have successfully completed all 5 security tasks. Generating certification...");
+          showCertification();
+        }, 800);
+      }
+    }
+
+    function showCertification() {
+      // Hide all panels
+      const panels = document.querySelectorAll('.mission-panel');
+      panels.forEach(p => p.style.display = 'none');
+      
+      document.getElementById("panel_certification").style.display = 'block';
+    }
+
+    // ────────────────────────────────────────────────────────────
+    // Mission 1: Log Review Code
+    // ────────────────────────────────────────────────────────────
+    function renderLogReview() {
+      const container = document.getElementById("logListContainer");
+      container.innerHTML = "";
+      
+      appState.logs.forEach(log => {
+        const item = document.createElement("div");
+        item.className = "log-item";
+        item.id = `log_item_${log.id}`;
+        
+        let msgClass = "log-msg-info";
+        if (log.text.includes("CRITICAL")) msgClass = "log-msg-critical";
+        else if (log.text.includes("WARNING")) msgClass = "log-msg-warning";
+
+        item.innerHTML = `
+          <div class="log-checkbox"></div>
+          <div class="log-content">
+            <span class="log-time">[${new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}]</span>
+            <span class="${msgClass}">${log.text}</span>
+          </div>
+        `;
+        
+        item.addEventListener("click", () => toggleLogSelect(log.id));
+        container.appendChild(item);
+      });
+    }
+
+    function toggleLogSelect(id) {
+      if (appState.completedMissions.logReview) return;
+
+      const item = document.getElementById(`log_item_${id}`);
+      if (appState.selectedLogs.has(id)) {
+        appState.selectedLogs.delete(id);
+        item.classList.remove("selected");
+      } else {
+        if (appState.selectedLogs.size >= 3) {
+          alert("Analysis limit reached. You can only flag 3 suspicious alerts.");
+          return;
+        }
+        appState.selectedLogs.add(id);
+        item.classList.add("selected");
+      }
+    }
+
+    function validateLogReview() {
+      if (appState.completedMissions.logReview) return;
+
+      const feedback = document.getElementById("feedback_logReview");
+      
+      if (appState.selectedLogs.size !== 3) {
+        feedback.className = "mission-feedback error";
+        feedback.innerHTML = "<strong>Analysis Rejected:</strong> You must flag exactly 3 suspicious log entries that indicate indicators of compromise.";
+        return;
+      }
+
+      // Check if all selected logs are anomalous
+      let allCorrect = true;
+      let reasons = "<ul>";
+      appState.selectedLogs.forEach(id => {
+        const log = appState.logs.find(l => l.id === id);
+        if (!log.isAnomalous) {
+          allCorrect = false;
+        } else {
+          reasons += `<li><strong>${log.text.split(']')[0] + ']'}</strong>: ${log.reason}</li>`;
+        }
+      });
+      reasons += "</ul>";
+
+      if (allCorrect) {
+        feedback.className = "mission-feedback success";
+        feedback.innerHTML = `<strong>Triage Verified!</strong> You successfully caught the threats:<br>${reasons}<br><em>Vulnerability Management channel is now unlocked.</em>`;
+        appState.completedMissions.logReview = true;
+        updateOverallProgress();
+        
+        // Unlock next card
+        switchMission("vulnMgmt");
+      } else {
+        feedback.className = "mission-feedback error";
+        feedback.innerHTML = "<strong>Triage Failed:</strong> Some flagged entries are normal system logs. Re-examine the payload, logins, or processes closely.";
+      }
+    }
+
+    // ────────────────────────────────────────────────────────────
+    // Mission 2: Vulnerability Management Code
+    // ────────────────────────────────────────────────────────────
+    function triggerVulnScan() {
+      if (appState.scanRun) return;
+      
+      const btn = document.getElementById("runScanBtn");
+      btn.disabled = true;
+      btn.textContent = "Scanning Systems…";
+      
+      const sweep = document.getElementById("scanSweep");
+      sweep.style.display = "block";
+      
+      const statusText = document.getElementById("scanStatusText");
+      statusText.textContent = "Initiating active endpoint assessment against local cluster...";
+
+      setTimeout(() => {
+        statusText.textContent = "Checking port registries and service response packets...";
+      }, 1000);
+
+      setTimeout(() => {
+        statusText.textContent = "Auditing OpenSSL engines and web application headers...";
+      }, 2000);
+
+      setTimeout(() => {
+        // Complete scan
+        appState.scanRun = true;
+        sweep.style.display = "none";
+        document.getElementById("vulnScanScreen").style.display = "none";
+        document.getElementById("vulnBoard").style.display = "block";
+        renderVulnBoard();
+      }, 3500);
+    }
+
+    function renderVulnBoard() {
+      const board = document.getElementById("vulnBoard");
+      // Keep apply button, replace items above it
+      const prevItems = board.querySelectorAll('.vuln-item');
+      prevItems.forEach(i => i.remove());
+
+      appState.vulns.forEach((v, idx) => {
+        const item = document.createElement("div");
+        item.className = "vuln-item";
+        
+        // Create select option html
+        let optionsHtml = `<option value="">-- Choose Remediation Patch --</option>`;
+        Object.entries(appState.patches).forEach(([key, val]) => {
+          const selected = appState.selectedPatches[idx] === key ? "selected" : "";
+          optionsHtml += `<option value="${key}" ${selected}>${val}</option>`;
+        });
+
+        item.innerHTML = `
+          <div class="vuln-details">
+            <div class="vuln-meta">
+              <span class="vuln-cve">${v.cve}</span>
+              <span class="vuln-severity ${v.severity}">${v.severity}</span>
+              <span class="mission-status-badge" style="background: ${v.status === 'Patched' ? 'rgba(0, 230, 118, 0.1)' : 'rgba(255, 23, 68, 0.1)'}; color: ${v.status === 'Patched' ? 'var(--green)' : 'var(--red)'}; border-color: ${v.status === 'Patched' ? 'rgba(0, 230, 118, 0.2)' : 'rgba(255, 23, 68, 0.2)'}">${v.status}</span>
+            </div>
+            <p class="vuln-description">${v.desc}</p>
+          </div>
+          <div>
+            <select class="patch-selector" onchange="selectPatchForVuln(${idx}, this.value)" ${appState.completedMissions.vulnMgmt ? 'disabled' : ''}>
+              ${optionsHtml}
+            </select>
+          </div>
+        `;
+        
+        board.insertBefore(item, board.lastElementChild);
+      });
+    }
+
+    function selectPatchForVuln(vulnIdx, patchKey) {
+      appState.selectedPatches[vulnIdx] = patchKey;
+    }
+
+    function validateVulnPatches() {
+      if (appState.completedMissions.vulnMgmt) return;
+
+      const feedback = document.getElementById("feedback_vulnMgmt");
+      let allCorrect = true;
+
+      appState.vulns.forEach((v, idx) => {
+        if (appState.selectedPatches[idx] !== v.patchOption) {
+          allCorrect = false;
+        }
+      });
+
+      if (allCorrect) {
+        appState.vulns.forEach(v => v.status = "Patched");
+        renderVulnBoard();
+        
+        feedback.className = "mission-feedback success";
+        feedback.innerHTML = "<strong>Remediation Verified!</strong> All vulnerabilities successfully patched and mitigated. Software dependencies upgraded.<br><em>Incident Response operations are now unlocked.</em>";
+        
+        appState.completedMissions.vulnMgmt = true;
+        updateOverallProgress();
+        switchMission("incidentResponse");
+      } else {
+        feedback.className = "mission-feedback error";
+        feedback.innerHTML = "<strong>Remediation Failed:</strong> Some patch allocations are incorrect or ineffective. Validate the vulnerability description and try again.";
+      }
+    }
+
+    // ────────────────────────────────────────────────────────────
+    // Mission 3: Incident Response Code
+    // ────────────────────────────────────────────────────────────
+    function startIncidentResponse() {
+      if (appState.irRunning || appState.completedMissions.incidentResponse) return;
+
+      appState.irRunning = true;
+      appState.irProgress = 0;
+      appState.irHealth = 100;
+      appState.irStep = 1;
+
+      document.getElementById("startIrBtn").disabled = true;
+      document.getElementById("startIrBtn").textContent = "Mitigating Active Attack…";
+
+      // Set up UI states
+      setupIrStepUI();
+      
+      const consoleEl = document.getElementById("irConsole");
+      consoleEl.innerHTML = `[!] ALERT: Ransomware execution detected on domain controller!<br>[!] Critical lateral movement spreading...<br>`;
+
+      // Timer tick
+      appState.irTimer = setInterval(() => {
+        // Increase threat spread
+        appState.irProgress += 2.5;
+        if (appState.irProgress >= 100) appState.irProgress = 100;
+
+        // Reduce health based on threat levels
+        if (appState.irProgress > 20) {
+          appState.irHealth -= (appState.irProgress / 20);
+        }
+        if (appState.irHealth <= 0) {
+          appState.irHealth = 0;
+          endIncidentResponse(false);
+        }
+
+        // Update gauges
+        document.getElementById("irThreatBar").style.width = `${appState.irProgress}%`;
+        document.getElementById("irThreatVal").textContent = `${Math.round(appState.irProgress)}%`;
+        document.getElementById("irHealthBar").style.width = `${appState.irHealth}%`;
+        document.getElementById("irHealthVal").textContent = `${Math.round(appState.irHealth)}%`;
+        
+        // Random logs
+        if (Math.random() > 0.7 && appState.irHealth > 0) {
+          consoleEl.innerHTML += `[-] Infection spreading to cluster node IP: 10.0.12.${Math.floor(Math.random() * 200)}...<br>`;
+          consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+      }, 200);
+    }
+
+    function setupIrStepUI() {
+      for (let i = 1; i <= 4; i++) {
+        const card = document.getElementById(`ir_card_${i}`);
+        const btn = document.getElementById(`ir_btn_${i}`);
+        
+        card.className = "ir-action-card disabled";
+        btn.disabled = true;
+        btn.textContent = getIrStepText(i);
+        btn.className = "btn btn-secondary btn-sm";
+      }
+
+      if (appState.irStep <= 4) {
+        const activeCard = document.getElementById(`ir_card_${appState.irStep}`);
+        const activeBtn = document.getElementById(`ir_btn_${appState.irStep}`);
+        activeCard.className = "ir-action-card";
+        activeBtn.disabled = false;
+        activeBtn.className = "btn btn-danger btn-sm";
+      }
+    }
+
+    function getIrStepText(step) {
+      const texts = { 1: "Isolate", 2: "Disable", 3: "Deploy", 4: "Restore" };
+      return texts[step];
+    }
+
+    function executeIrStep(stepNum) {
+      if (!appState.irRunning || appState.irStep !== stepNum) return;
+
+      const consoleEl = document.getElementById("irConsole");
+      const btn = document.getElementById(`ir_btn_${stepNum}`);
+      const card = document.getElementById(`ir_card_${stepNum}`);
+      
+      btn.disabled = true;
+      btn.textContent = "Mitigating...";
+      btn.className = "btn btn-secondary btn-sm";
+
+      setTimeout(() => {
+        card.className = "ir-action-card completed";
+        btn.textContent = "Secured ✓";
+        btn.className = "btn btn-success btn-sm";
+
+        if (stepNum === 1) {
+          consoleEl.innerHTML += `[✓] SUCCESS: Host DB-PROD-02 network ports blocked. Infection isolated.<br>`;
+          appState.irProgress = Math.max(0, appState.irProgress - 25);
+        } else if (stepNum === 2) {
+          consoleEl.innerHTML += `[✓] SUCCESS: Credential sync revoked. Service Account locked out.<br>`;
+          appState.irProgress = Math.max(0, appState.irProgress - 20);
+        } else if (stepNum === 3) {
+          consoleEl.innerHTML += `[✓] SUCCESS: EDR block rules pushed to endpoint fleets. Executable terminated.<br>`;
+          appState.irProgress = 0; // stop threat spread growth rate
+        } else if (stepNum === 4) {
+          consoleEl.innerHTML += `[✓] SUCCESS: Restoration snapshot loaded. Virtual servers operational.<br>`;
+          appState.irHealth = 100;
+        }
+
+        consoleEl.scrollTop = consoleEl.scrollHeight;
+
+        appState.irStep++;
+        if (appState.irStep > 4) {
+          endIncidentResponse(true);
+        } else {
+          setupIrStepUI();
+        }
+      }, 600);
+    }
+
+    function endIncidentResponse(success) {
+      clearInterval(appState.irTimer);
+      appState.irRunning = false;
+      
+      const feedback = document.getElementById("feedback_incidentResponse");
+      const btn = document.getElementById("startIrBtn");
+      
+      btn.disabled = false;
+      btn.textContent = "Initiate Emergency Protocol";
+
+      if (success) {
+        feedback.className = "mission-feedback success";
+        feedback.innerHTML = "<strong>Attack Halted!</strong> You successfully quarantined the infected server cluster, stopped lateral exfiltration, and recovered data via secure backups.<br><em>Identity Control permissions are now unlocked.</em>";
+        appState.completedMissions.incidentResponse = true;
+        updateOverallProgress();
+        switchMission("identityControl");
+      } else {
+        feedback.className = "mission-feedback error";
+        feedback.innerHTML = "<strong>System Destroyed!</strong> The ransomware lateral spread reached 100% and compromised corporate network directories. Click 'Initiate Emergency Protocol' to try again.";
+        // Reset steps
+        for (let i = 1; i <= 4; i++) {
+          document.getElementById(`ir_card_${i}`).className = "ir-action-card disabled";
+          document.getElementById(`ir_btn_${i}`).disabled = true;
+        }
+      }
+    }
+
+    // ────────────────────────────────────────────────────────────
+    // Mission 4: Identity Control Code
+    // ────────────────────────────────────────────────────────────
+    function renderIdentityControl() {
+      const tbody = document.getElementById("iamTableBody");
+      tbody.innerHTML = "";
+
+      appState.iamUsers.forEach(u => {
+        const tr = document.createElement("tr");
+        if (u.isAnomalous && !u.secured) {
+          tr.className = "flagged";
+        }
+
+        const mfaBadge = u.mfa 
+          ? `<span class="mfa-status-pill enabled">MFA Enforced</span>`
+          : `<span class="mfa-status-pill disabled">MFA Required</span>`;
+
+        let actionControls = "";
+        if (u.actionRequired === "mfa") {
+          actionControls = `
+            <div style="display:flex; align-items:center; gap: 8px;">
+              <span style="font-size:0.75rem; color:var(--text-secondary)">Enable MFA</span>
+              <label class="switch">
+                <input type="checkbox" id="mfa_toggle_${u.id}" onchange="toggleMfaField(${u.id}, this.checked)" ${u.mfa ? 'checked' : ''} ${appState.completedMissions.identityControl ? 'disabled' : ''}>
+                <span class="slider"></span>
+              </label>
+            </div>
+          `;
+        } else if (u.actionRequired === "suspend") {
+          actionControls = `
+            <button class="btn btn-secondary btn-sm" id="suspend_btn_${u.id}" onclick="suspendUserAccount(${u.id})" ${u.secured ? 'disabled' : ''} ${appState.completedMissions.identityControl ? 'disabled' : ''}>
+              ${u.secured ? 'Account Suspended' : 'Suspend Account'}
+            </button>
+          `;
+        } else {
+          actionControls = `<span style="color:var(--text-muted); font-size:0.75rem">Compliance Verified</span>`;
+        }
+
+        const activityClass = u.isAnomalous ? "user-activity critical" : "user-activity";
+
+        tr.innerHTML = `
+          <td>
+            <div class="user-principal">
+              <span class="user-alias">${u.user}</span>
+              <span class="user-email">${u.user}@corp.local</span>
+            </div>
+          </td>
+          <td><span style="font-weight:500; font-size:0.75rem">${u.role}</span></td>
+          <td id="mfa_cell_${u.id}">${mfaBadge}</td>
+          <td><span class="${activityClass}">${u.activity}</span></td>
+          <td id="action_cell_${u.id}">${actionControls}</td>
+        `;
+        
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Toggle logic
+    function toggleMfaField(userId, isChecked) {
+      const user = appState.iamUsers.find(u => u.id === userId);
+      user.mfa = isChecked;
+      if (isChecked && user.actionRequired === "mfa") {
+        user.secured = true;
+      } else {
+        user.secured = false;
+      }
+      
+      const cell = document.getElementById(`mfa_cell_${userId}`);
+      cell.innerHTML = isChecked 
+        ? `<span class="mfa-status-pill enabled">MFA Enforced</span>`
+        : `<span class="mfa-status-pill disabled">MFA Required</span>`;
+    }
+
+    function suspendUserAccount(userId) {
+      const user = appState.iamUsers.find(u => u.id === userId);
+      user.secured = true;
+      
+      const cell = document.getElementById(`action_cell_${userId}`);
+      cell.innerHTML = `<button class="btn btn-secondary btn-sm" disabled>Account Suspended ✓</button>`;
+      
+      alert(`Contractor Account '${user.user}' has been suspended in Active Directory.`);
+    }
+
+    function validateIdentityControl() {
+      if (appState.completedMissions.identityControl) return;
+
+      const feedback = document.getElementById("feedback_identityControl");
+      let allSecured = true;
+
+      appState.iamUsers.forEach(u => {
+        if (u.isAnomalous && !u.secured) {
+          allSecured = false;
+        }
+      });
+
+      if (allSecured) {
+        feedback.className = "mission-feedback success";
+        feedback.innerHTML = "<strong>IAM Audit Compliance Checked!</strong> Active Directory identities protected. Suspicious privilege access tokens terminated.<br><em>Security Training drills are now unlocked.</em>";
+        
+        appState.completedMissions.identityControl = true;
+        updateOverallProgress();
+        switchMission("securityTraining");
+      } else {
+        feedback.className = "mission-feedback error";
+        feedback.innerHTML = "<strong>Access Baseline Mismatch:</strong> Privileged accounts or suspicious sessions remain unprotected. Enable MFA on flagged administrators and suspend expired contractor session keys.";
+      }
+    }
+
+    // ────────────────────────────────────────────────────────────
+    // Mission 5: Security Training Code
+    // ────────────────────────────────────────────────────────────
+    function renderSecurityTraining() {
+      const listContainer = document.getElementById("emailListContainer");
+      listContainer.innerHTML = "";
+
+      appState.emails.forEach((email, idx) => {
+        const item = document.createElement("div");
+        item.className = `email-item ${idx === appState.activeEmailIndex ? 'active' : ''} ${email.userVerdict !== null ? 'completed' : ''}`;
+        item.onclick = () => selectEmail(idx);
+
+        let statusText = "Pending Analysis";
+        let statusClass = "text-muted";
+        if (email.userVerdict !== null) {
+          statusText = email.userVerdict === email.isPhishing ? "Correct" : "Incorrect";
+          statusClass = email.userVerdict === email.isPhishing ? "text-green" : "text-red";
+        }
+
+        item.innerHTML = `
+          <span class="email-item-sender">${email.sender}</span>
+          <span class="email-item-subject">${email.subject}</span>
+          <span class="email-item-status ${statusClass}">${statusText}</span>
+        `;
+        listContainer.appendChild(item);
+      });
+
+      // Render Active Email Pane
+      const activeEmail = appState.emails[appState.activeEmailIndex];
+      const pane = document.getElementById("emailPane");
+      
+      if (!activeEmail) {
+        pane.innerHTML = `<div style="padding: 40px; text-align: center; color: var(--text-muted)">Select an email to audit</div>`;
+        return;
+      }
+
+      let actionsHtml = "";
+      if (activeEmail.userVerdict === null) {
+        actionsHtml = `
+          <button class="btn btn-secondary" onclick="submitEmailVerdict(false)">Classify Safe</button>
+          <button class="btn btn-danger" onclick="submitEmailVerdict(true)">Report Phishing</button>
+        `;
+      } else {
+        const isCorrect = activeEmail.userVerdict === activeEmail.isPhishing;
+        const correctLabel = activeEmail.isPhishing ? "Phishing Attempt" : "Legitimate Safe Communication";
+        actionsHtml = `
+          <span class="email-verdict-note" style="color: ${isCorrect ? 'var(--green)' : 'var(--red)'}">
+            Verdict: ${isCorrect ? 'Correct Analysis' : 'Incorrect Analysis'} (${correctLabel})
+          </span>
+        `;
+      }
+
+      pane.innerHTML = `
+        <div class="email-header">
+          <div class="email-meta-row">
+            <span class="email-meta-label">From:</span>
+            <span class="email-meta-val">${activeEmail.sender}</span>
+          </div>
+          <div class="email-meta-row">
+            <span class="email-meta-label">Routing-IP:</span>
+            <span class="email-meta-val" style="color: var(--amber);">${activeEmail.realSender}</span>
+          </div>
+          <div class="email-meta-row">
+            <span class="email-meta-label">Subject:</span>
+            <span class="email-meta-val" style="font-weight: 600; color: var(--text-primary);">${activeEmail.subject}</span>
+          </div>
+        </div>
+        <div class="email-body-area">
+          <p>Dear Employee,</p>
+          <div class="email-body-text">
+            ${activeEmail.body}
+            <br><br>
+            <span class="email-link-mock" data-tooltip="Inspect Target URL: ${activeEmail.actualLink}">
+              ${activeEmail.linkText}
+            </span>
+          </div>
+          <p style="margin-top: 12px; font-size: 0.75rem; color: var(--text-muted);">* Hover over links in corporate emails to inspect actual DNS redirects.</p>
+        </div>
+        <div class="email-actions-bar">
+          ${actionsHtml}
+        </div>
+      `;
+    }
+
+    function selectEmail(idx) {
+      appState.activeEmailIndex = idx;
+      renderSecurityTraining();
+    }
+
+    function submitEmailVerdict(verdictBool) {
+      const email = appState.emails[appState.activeEmailIndex];
+      email.userVerdict = verdictBool;
+      
+      const isCorrect = verdictBool === email.isPhishing;
+      if (isCorrect) {
+        alert("Correct Analysis! Good job inspecting headers and hyperlinks.");
+      } else {
+        alert("Incorrect Analysis. Look at the sender domain mapping or target link carefully next time.");
+      }
+
+      renderSecurityTraining();
+    }
+
+    function validateSecurityTraining() {
+      if (appState.completedMissions.securityTraining) return;
+
+      const feedback = document.getElementById("feedback_securityTraining");
+      let allCompleted = true;
+      let score = 0;
+
+      appState.emails.forEach(e => {
+        if (e.userVerdict === null) {
+          allCompleted = false;
+        } else if (e.userVerdict === e.isPhishing) {
+          score++;
+        }
+      });
+
+      if (!allCompleted) {
+        feedback.className = "mission-feedback error";
+        feedback.innerHTML = "<strong>Training Incomplete:</strong> You must analyze and submit verdicts for all 3 emails in the queue.";
+        return;
+      }
+
+      if (score === 3) {
+        feedback.className = "mission-feedback success";
+        feedback.innerHTML = "<strong>Awareness Certification Verified!</strong> 100% compliance rate. Employees successfully trained to identify social engineering templates.";
+        
+        appState.completedMissions.securityTraining = true;
+        updateOverallProgress();
+      } else {
+        feedback.className = "mission-feedback error";
+        feedback.innerHTML = `<strong>Training Failed (Score: ${score}/3):</strong> You made classification errors. Click individual emails to review correct answers, reset verdicts, and retake the audit.`;
+        
+        // Reset audits so they can retry
+        appState.emails.forEach(e => e.userVerdict = null);
+        renderSecurityTraining();
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cybersecurity Professional Tasks | SecOps Guide</title>
+  <meta name="description" content="Explore the essential duties of cybersecurity professionals — from log review and vulnerability management to incident response, identity control, and security training.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="cyber-tasks.css">
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- Floating Particles Canvas -->
+  <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+  <!-- Header / Hero -->
+  <header class="hero" id="hero">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      <span>Professional Cybersecurity Operations</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="title-line">Cybersecurity</span>
+      <span class="title-line title-accent">Professional Tasks</span>
+    </h1>
+    <p class="hero-subtitle">
+      Security professionals safeguard organizations through vigilant monitoring, proactive defense, and rapid response. Explore the core duties that keep enterprises secure in an ever-evolving threat landscape.
+    </p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-number" data-target="5">0</span>
+        <span class="stat-label">Core Duties</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number" data-target="24">0</span>
+        <span class="stat-label">Hours Coverage</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number" data-target="365">0</span>
+        <span class="stat-label">Days / Year</span>
+      </div>
+    </div>
+    <div class="scroll-indicator" id="scrollIndicator">
+      <span>Scroll to explore</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="7 13 12 18 17 13"></polyline>
+        <polyline points="7 6 12 11 17 6"></polyline>
+      </svg>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content" id="mainContent">
+
+    <!-- Task 1: Log Review -->
+    <section class="task-section" id="taskLogReview" data-task="1">
+      <div class="task-number-track">
+        <span class="task-num">01</span>
+      </div>
+      <div class="task-card">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <div class="card-icon" style="--icon-color: #00d4ff; --icon-glow: rgba(0, 212, 255, 0.3);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <div class="card-tag">Daily Operations</div>
+        </div>
+        <h2 class="card-title">Log Review</h2>
+        <p class="card-description">
+          Checking overnight logs and automated alerts to catch suspicious activity. Security analysts start each day reviewing SIEM dashboards, correlating events across systems, and triaging alerts by severity to identify potential breaches before they escalate.
+        </p>
+        <div class="card-details">
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <span>First task every morning</span>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+            </div>
+            <span>SIEM & IDS monitoring</span>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </div>
+            <span>Alert triage & correlation</span>
+          </div>
+        </div>
+        <div class="card-terminal">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <span class="terminal-title">siem-log-viewer.sh</span>
+          </div>
+          <div class="terminal-body">
+            <div class="terminal-line" data-delay="0">
+              <span class="term-prompt">$</span>
+              <span class="term-cmd">tail -f /var/log/auth.log | grep "Failed"</span>
+            </div>
+            <div class="terminal-line" data-delay="1">
+              <span class="term-output term-warn">Jun 19 02:14:33 sshd: Failed password for root from 192.168.1.45</span>
+            </div>
+            <div class="terminal-line" data-delay="2">
+              <span class="term-output term-warn">Jun 19 02:14:35 sshd: Failed password for root from 192.168.1.45</span>
+            </div>
+            <div class="terminal-line" data-delay="3">
+              <span class="term-output term-danger">⚠ ALERT: Brute-force attempt detected — 47 failed logins in 5 min</span>
+            </div>
+            <div class="terminal-line" data-delay="4">
+              <span class="term-prompt">$</span>
+              <span class="term-cmd">firewall-cmd --add-rich-rule='rule family=ipv4 source address=192.168.1.45 drop'</span>
+            </div>
+            <div class="terminal-line" data-delay="5">
+              <span class="term-output term-success">✓ IP blocked successfully. Incident logged: INC-2024-0619</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Task 2: Vulnerability Management -->
+    <section class="task-section" id="taskVulnMgmt" data-task="2">
+      <div class="task-number-track">
+        <span class="task-num">02</span>
+      </div>
+      <div class="task-card">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <div class="card-icon" style="--icon-color: #a855f7; --icon-glow: rgba(168, 85, 247, 0.3);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path d="M9 12l2 2 4-4"></path>
+            </svg>
+          </div>
+          <div class="card-tag">Proactive Defense</div>
+        </div>
+        <h2 class="card-title">Vulnerability Management</h2>
+        <p class="card-description">
+          Scanning software for weaknesses and applying patches to fix bugs before hackers exploit them. This continuous process involves automated scanning tools, CVE databases, risk scoring (CVSS), and coordinated deployment of security patches across all systems.
+        </p>
+        <div class="card-details">
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+            <span>Automated scanning tools</span>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+            <span>CVE database tracking</span>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            </div>
+            <span>Patch deployment & testing</span>
+          </div>
+        </div>
+        <!-- Vulnerability Scanner Visual -->
+        <div class="vuln-scanner">
+          <div class="scanner-header">
+            <span class="scanner-title">Vulnerability Scan Results</span>
+            <span class="scanner-status scanning">Scanning...</span>
+          </div>
+          <div class="scanner-progress">
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+            <span class="progress-text">Analyzing 2,847 assets...</span>
+          </div>
+          <div class="scanner-results">
+            <div class="vuln-row critical">
+              <span class="vuln-severity">CRITICAL</span>
+              <span class="vuln-id">CVE-2024-21762</span>
+              <span class="vuln-desc">FortiOS Out-of-Bound Write</span>
+              <span class="vuln-cvss">9.8</span>
+            </div>
+            <div class="vuln-row high">
+              <span class="vuln-severity">HIGH</span>
+              <span class="vuln-id">CVE-2024-3094</span>
+              <span class="vuln-desc">XZ Utils Backdoor</span>
+              <span class="vuln-cvss">8.6</span>
+            </div>
+            <div class="vuln-row medium">
+              <span class="vuln-severity">MEDIUM</span>
+              <span class="vuln-id">CVE-2024-1709</span>
+              <span class="vuln-desc">ConnectWise Auth Bypass</span>
+              <span class="vuln-cvss">6.1</span>
+            </div>
+            <div class="vuln-row low">
+              <span class="vuln-severity">LOW</span>
+              <span class="vuln-id">CVE-2024-0056</span>
+              <span class="vuln-desc">SQL Client Info Disclosure</span>
+              <span class="vuln-cvss">3.7</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Task 3: Incident Response -->
+    <section class="task-section" id="taskIncidentResponse" data-task="3">
+      <div class="task-number-track">
+        <span class="task-num">03</span>
+      </div>
+      <div class="task-card">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <div class="card-icon" style="--icon-color: #f43f5e; --icon-glow: rgba(244, 63, 94, 0.3);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <div class="card-tag">Critical Response</div>
+        </div>
+        <h2 class="card-title">Incident Response</h2>
+        <p class="card-description">
+          Investigating and stopping active cyberattacks — such as phishing or ransomware — to minimize system damage. The IR team follows structured playbooks to contain threats, eradicate malicious artifacts, recover systems, and document lessons learned.
+        </p>
+        <div class="card-details">
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path></svg>
+            </div>
+            <span>Phishing & ransomware</span>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+            </div>
+            <span>Contain & eradicate threats</span>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+            </div>
+            <span>Recovery & post-mortem</span>
+          </div>
+        </div>
+        <!-- Incident Timeline -->
+        <div class="incident-timeline">
+          <div class="timeline-title">Incident Response Lifecycle</div>
+          <div class="timeline-track">
+            <div class="timeline-step active" data-phase="1">
+              <div class="step-marker">
+                <div class="marker-inner"></div>
+              </div>
+              <div class="step-label">Detect</div>
+              <div class="step-time">T+0 min</div>
+            </div>
+            <div class="timeline-connector active"></div>
+            <div class="timeline-step active" data-phase="2">
+              <div class="step-marker">
+                <div class="marker-inner"></div>
+              </div>
+              <div class="step-label">Analyze</div>
+              <div class="step-time">T+15 min</div>
+            </div>
+            <div class="timeline-connector active"></div>
+            <div class="timeline-step in-progress" data-phase="3">
+              <div class="step-marker">
+                <div class="marker-inner pulse"></div>
+              </div>
+              <div class="step-label">Contain</div>
+              <div class="step-time">T+45 min</div>
+            </div>
+            <div class="timeline-connector"></div>
+            <div class="timeline-step" data-phase="4">
+              <div class="step-marker">
+                <div class="marker-inner"></div>
+              </div>
+              <div class="step-label">Eradicate</div>
+              <div class="step-time">T+2 hrs</div>
+            </div>
+            <div class="timeline-connector"></div>
+            <div class="timeline-step" data-phase="5">
+              <div class="step-marker">
+                <div class="marker-inner"></div>
+              </div>
+              <div class="step-label">Recover</div>
+              <div class="step-time">T+6 hrs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Task 4: Identity Control -->
+    <section class="task-section" id="taskIdentityControl" data-task="4">
+      <div class="task-number-track">
+        <span class="task-num">04</span>
+      </div>
+      <div class="task-card">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <div class="card-icon" style="--icon-color: #22d3ee; --icon-glow: rgba(34, 211, 238, 0.3);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <div class="card-tag">Access Security</div>
+        </div>
+        <h2 class="card-title">Identity Control</h2>
+        <p class="card-description">
+          Managing who has access to company files using Multi-Factor Authentication (MFA) — a security method that requires more than one way to verify your identity. IAM teams enforce the principle of least privilege, ensuring users only access what they need.
+        </p>
+        <div class="card-details">
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+            <span>Multi-Factor Authentication</span>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <span>Least privilege principle</span>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+            </div>
+            <span>Access provisioning & review</span>
+          </div>
+        </div>
+        <!-- MFA Visual -->
+        <div class="mfa-visual">
+          <div class="mfa-title">Multi-Factor Authentication Flow</div>
+          <div class="mfa-steps">
+            <div class="mfa-step" data-step="1">
+              <div class="mfa-step-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              </div>
+              <div class="mfa-step-info">
+                <span class="mfa-step-label">Factor 1</span>
+                <span class="mfa-step-name">Password</span>
+                <span class="mfa-step-desc">Something you know</span>
+              </div>
+              <div class="mfa-check verified">✓</div>
+            </div>
+            <div class="mfa-connector">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </div>
+            <div class="mfa-step" data-step="2">
+              <div class="mfa-step-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+              </div>
+              <div class="mfa-step-info">
+                <span class="mfa-step-label">Factor 2</span>
+                <span class="mfa-step-name">Auth App / SMS</span>
+                <span class="mfa-step-desc">Something you have</span>
+              </div>
+              <div class="mfa-check verifying">
+                <div class="spinner"></div>
+              </div>
+            </div>
+            <div class="mfa-connector">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </div>
+            <div class="mfa-step" data-step="3">
+              <div class="mfa-step-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 11c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2"></path><path d="M6 11c0-3.3 2.7-6 6-6s6 2.7 6 6"></path><path d="M2 11c0-5.5 4.5-10 10-10s10 4.5 10 10"></path><circle cx="12" cy="18" r="3"></circle></svg>
+              </div>
+              <div class="mfa-step-info">
+                <span class="mfa-step-label">Factor 3</span>
+                <span class="mfa-step-name">Biometric</span>
+                <span class="mfa-step-desc">Something you are</span>
+              </div>
+              <div class="mfa-check pending">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Task 5: Security Training -->
+    <section class="task-section" id="taskSecTraining" data-task="5">
+      <div class="task-number-track">
+        <span class="task-num">05</span>
+      </div>
+      <div class="task-card">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <div class="card-icon" style="--icon-color: #f59e0b; --icon-glow: rgba(245, 158, 11, 0.3);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+          </div>
+          <div class="card-tag">Human Layer</div>
+        </div>
+        <h2 class="card-title">Security Training</h2>
+        <p class="card-description">
+          Teaching employees how to spot social engineering and suspicious emails. Security awareness programs use simulated phishing campaigns, interactive workshops, and gamified learning to build a human firewall — the most critical defense layer.
+        </p>
+        <div class="card-details">
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            </div>
+            <span>Phishing simulations</span>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <span>Employee workshops</span>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+            <span>Gamified learning modules</span>
+          </div>
+        </div>
+        <!-- Phishing Example -->
+        <div class="phishing-demo">
+          <div class="phishing-title">⚠ Can You Spot the Phish?</div>
+          <div class="email-preview">
+            <div class="email-header-row">
+              <span class="email-from">From: IT-Support@c0mpany-sec.net</span>
+              <span class="email-flag">🚩 Suspicious</span>
+            </div>
+            <div class="email-subject">Subject: URGENT: Your account will be deactivated in 24 hours</div>
+            <div class="email-body">
+              <p>Dear Employee,</p>
+              <p>We have detected unusual activity on your account. To avoid permanent suspension, please verify your identity immediately by clicking the link below:</p>
+              <div class="phishing-link">
+                <span class="link-text">https://company-portal-verify.suspicious-domain.com/login</span>
+                <span class="link-warning">⚠ Fake domain</span>
+              </div>
+              <p class="email-urgency">You must act within 24 hours or your access will be revoked.</p>
+            </div>
+            <div class="red-flags">
+              <div class="flag-title">🔍 Red Flags Identified:</div>
+              <div class="flag-item"><span class="flag-marker">1</span> Misspelled sender domain (c0mpany vs company)</div>
+              <div class="flag-item"><span class="flag-marker">2</span> Creates false sense of urgency</div>
+              <div class="flag-item"><span class="flag-marker">3</span> Suspicious external link</div>
+              <div class="flag-item"><span class="flag-marker">4</span> Generic greeting — no personal name</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="footer-logo">🛡️</span>
+        <span>SecOps Professional Guide</span>
+      </div>
+      <p class="footer-text">
+        Cybersecurity is a shared responsibility. Stay vigilant, stay secure.
+      </p>
+      <div class="footer-links">
+        <a href="index.html" class="footer-link">SOC Dashboard</a>
+        <a href="cybersecurity.html" class="footer-link">Cybersecurity Hub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="cyber-tasks.js"></script>
+</body>
+</html>

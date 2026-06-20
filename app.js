@@ -97,6 +97,94 @@ class DataEngine {
       'log-archive-weekly', 'vm-snapshot-cluster', 'siem-index-backup',
       'cert-store-backup',
     ];
+    this.riskTitles = [
+      { title: 'Exposed S3 Bucket containing backup logs', cat: 'Cloud Security', score: 15, sev: 'high' },
+      { title: 'Outdated TLS version (1.0) on legacy API', cat: 'Network Security', score: 8, sev: 'medium' },
+      { title: 'Unrestricted egress on dev environment', cat: 'Infrastructure', score: 12, sev: 'high' },
+      { title: 'Lack of offline backups for active directory config', cat: 'Business Continuity', score: 20, sev: 'critical' },
+      { title: 'Shared service account passwords in plaintext', cat: 'Access Control', score: 16, sev: 'critical' },
+      { title: 'API Key exposed in public frontend repository', cat: 'Application Security', score: 18, sev: 'critical' },
+      { title: 'Missing MFA on legacy VPN gateway', cat: 'Access Control', score: 15, sev: 'high' },
+      { title: 'No egress filtering on production database subnet', cat: 'Network Security', score: 10, sev: 'high' }
+    ];
+    this.auditEvents = [
+      { action: 'Privilege Escalation', user: 'jdoe@corp.local', detail: 'Granted Domain Admin rights', status: 'warning', icon: '⚠' },
+      { action: 'Dormant Account Cleaned', user: 'system-agent', detail: 'Deactivated account testuser_99', status: 'pass', icon: '✓' },
+      { action: 'MFA Enforced', user: 'sec-admin', detail: 'Enforced MFA on account billing-api', status: 'pass', icon: '✓' },
+      { action: 'Unauthorized Sudo Attempt', user: 'developer_temp', detail: 'Attempted sudo on DB-PROD-01', status: 'fail', icon: '✗' },
+      { action: 'Access Policy Update', user: 'sec-admin', detail: 'Restricted access to AWS root account', status: 'pass', icon: '✓' },
+      { action: 'SSH Key Added', user: 'r&d-lead', detail: 'Authorized new SSH key for repo-server', status: 'warning', icon: '⚠' }
+    ];
+    this.phishingCampaignsList = [
+      { title: 'Q2 Phishing Simulation', detail: 'Departmental testing using IT helpdesk template', passPct: 91, clickPct: 7, failPct: 2 },
+      { title: 'Urgent Password Reset Simulation', detail: 'Company-wide simulated credential harvesting', passPct: 84, clickPct: 11, failPct: 5 },
+      { title: 'Package Delivery SMS Exercise', detail: 'SMS-based smishing simulation for sales team', passPct: 88, clickPct: 10, failPct: 2 },
+      { title: 'HR Annual Review Alert Simulation', detail: 'Simulated phishing using benefit renewal template', passPct: 92, clickPct: 6, failPct: 2 }
+    ];
+
+    this.penTestScripts = {
+      sql_injection: [
+        '[*] Launching SQL Injection simulation against DB-PROD...',
+        '[*] Scanning target url: http://db-prod.corp.local/api/query?id=1...',
+        '[!] Detected vulnerable parameter: "id"',
+        '[*] Injecting payload: 1 UNION SELECT username, password_hash FROM users...',
+        '[*] Extracting admin password hash: $2a$12$L7R2eX98...',
+        '[+] Password extracted successfully!',
+        '[*] Executing database log cleanup script...',
+        '[+] SQL Injection Simulation COMPLETED. Status: SUCCESS'
+      ],
+      credential_stuffing: [
+        '[*] Initializing Credential Stuffing against VPN gateway...',
+        '[*] Target endpoint: https://vpn.corp.local/login...',
+        '[*] Loading list of 5,000 breached account credentials...',
+        '[*] Spawning 10 parallel authentication threads...',
+        '[!] Thread 3: Authentication success for user: admin@corp.local',
+        '[!] Hijacking session token: sess_948f98c8f0003...',
+        '[-] Attempting bypass MFA - MFA Prompt triggered!',
+        '[!] MFA Response timeout (MFA not completed)',
+        '[-] Simulation FAILED. Target MFA policy successfully blocked authentication.'
+      ],
+      rce_exploit: [
+        '[*] Targeting Web Server Cluster for Remote Code Execution...',
+        '[*] Port scanning target... Open ports: 80, 443, 8080',
+        '[*] Identified software: Apache Tomcat v9.0.37 (Vulnerable to CVE-2026-31337)',
+        '[*] Sending crafted HTTP request payload containing shellcode...',
+        '[*] Exploit payload executed successfully on remote server',
+        '[!] Spawning reverse shell payload connection...',
+        '[!] Callback received: Connection from 10.0.4.15 -> 203.0.113.88:4444',
+        '[+] Established active shell session! uid: 0 (root)',
+        '[+] Simulation COMPLETED. Status: SUCCESS'
+      ],
+      priv_escalation: [
+        '[*] Initializing Privilege Escalation simulation...',
+        '[*] Target environment: Server DB-PROD-02 (Linux Kernel 5.15)',
+        '[*] Uploading exploit payload: DirtyPipe exploit...',
+        '[*] Compiling exploit binary payload...',
+        '[*] Executing exploit code to modify page cache memory...',
+        '[!] Exploiting Kernel pipe buffer vulnerability...',
+        '[!] Spawning sub-shell process...',
+        '[+] Privilege escalation SUCCESS. Switched to uid 0 (root)',
+        '[+] Simulation COMPLETED. Status: SUCCESS'
+      ]
+    };
+
+    this.threatHuntData = {
+      powershell_egress: [
+        { title: 'Suspicious PowerShell Outbound Web Request', ip: '10.0.15.82', desc: 'PowerShell process initiating outbound connection to 198.51.100.22 on TCP 4444', severity: 'critical' },
+        { title: 'Base64 Encoded PowerShell Script Executed', ip: '10.0.22.105', desc: 'PowerShell.exe executed with hidden window and encoded command argument', severity: 'high' }
+      ],
+      registry_run_keys: [
+        { title: 'Registry Run Key Modification', ip: '10.0.15.110', desc: 'Regedit process modified HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Run', severity: 'high' },
+        { title: 'New Startup Script Registered', ip: '10.0.8.214', desc: 'Startup batch script added to directory HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\RunServices', severity: 'medium' }
+      ],
+      lsass_memory_dump: [
+        { title: 'LSASS Memory Process Access', ip: '10.0.4.12', desc: 'lsass.exe memory was accessed by anomalous process dump-tool.exe', severity: 'critical' },
+        { title: 'Procdump Tool Executed on DC', ip: '10.0.1.10', desc: 'Sysinternals Procdump tool executed targeting Local Security Authority Subsystem', severity: 'critical' }
+      ],
+      suspicious_scheduled_tasks: [
+        { title: 'New Scheduled Task Created', ip: '10.0.14.99', desc: 'Task scheduler registered new daily task pointing to Temp directory', severity: 'medium' }
+      ]
+    };
   }
 
   randomIP() {
@@ -223,6 +311,19 @@ class DataEngine {
       { label: 'Applications', value: this.rand(65, 98) },
       { label: 'Security Tools', value: this.rand(80, 100) },
       { label: 'Drivers', value: this.rand(60, 96) },
+    ];
+  }
+
+  generateVulnTrendData() {
+    return [45, 42, 38, 32, 29, 27, 24, 18];
+  }
+
+  generateScanHistory() {
+    return [
+      { title: 'Full Network Scan', detail: '142 hosts audited, 3 critical issues found', time: '12h ago', status: 'critical', icon: '✗' },
+      { title: 'Quick Web App Scan', detail: 'API endpoints audited, no criticals found', time: '1d ago', status: 'passed', icon: '✓' },
+      { title: 'Credentialed Host Audit', detail: '80 servers audited, 4 warnings flagged', time: '2d ago', status: 'warning', icon: '⚠' },
+      { title: 'External Range Audit', detail: 'IP block 203.0.113.0/24 audited, clean', time: '5d ago', status: 'passed', icon: '✓' }
     ];
   }
 }
@@ -397,6 +498,161 @@ class ChartManager {
     let progress = 0;
     const totalFrames = 40;
 
+        // Percentage
+        ctx.fillStyle = 'rgba(255,255,255,0.6)';
+        ctx.font = 'bold 12px Inter, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(`${Math.round(item.value * ease)}%`, pad.left + maxBarW + 8, y + barH / 2);
+      });
+
+      if (t < 1) requestAnimationFrame(draw);
+    };
+    requestAnimationFrame(draw);
+  }
+
+  drawVulnTrend(canvas, data) {
+    const { ctx, w, h } = this.prepareCanvas(canvas);
+    const pad = { top: 15, right: 15, bottom: 25, left: 35 };
+    const cw = w - pad.left - pad.right;
+    const ch = h - pad.top - pad.bottom;
+    const maxVal = Math.max(...data) * 1.15;
+    const points = data.map((v, i) => ({
+      x: pad.left + (i / (data.length - 1)) * cw,
+      y: pad.top + ch - (v / maxVal) * ch,
+    }));
+
+    let progress = 0;
+    const totalFrames = 40;
+
+    const draw = () => {
+      progress++;
+      const t = Math.min(progress / totalFrames, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
+      ctx.clearRect(0, 0, w, h);
+
+      // Grid
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 3; i++) {
+        const y = pad.top + (ch / 3) * i;
+        ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(w - pad.right, y); ctx.stroke();
+      }
+
+      // Labels
+      ctx.fillStyle = 'rgba(255,255,255,0.4)';
+      ctx.font = '9px Inter, sans-serif';
+      ctx.textAlign = 'right';
+      for (let i = 0; i <= 3; i++) {
+        const y = pad.top + (ch / 3) * i;
+        const val = Math.round(maxVal - (maxVal / 3) * i);
+        ctx.fillText(val, pad.left - 6, y + 3);
+      }
+
+      ctx.textAlign = 'center';
+      const labels = ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+      for (let i = 0; i < data.length; i++) {
+        const x = pad.left + (i / (data.length - 1)) * cw;
+        ctx.fillText(labels[i] || '', x, h - 4);
+      }
+
+      const visiblePoints = points.map(p => ({
+        x: p.x,
+        y: pad.top + ch - (pad.top + ch - p.y) * ease
+      }));
+
+      ctx.beginPath();
+      ctx.moveTo(visiblePoints[0].x, visiblePoints[0].y);
+      for (let i = 1; i < visiblePoints.length; i++) {
+        ctx.lineTo(visiblePoints[i].x, visiblePoints[i].y);
+      }
+      ctx.strokeStyle = '#ff1744';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Area fill
+      const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + ch);
+      grad.addColorStop(0, 'rgba(255,23,68,0.2)');
+      grad.addColorStop(1, 'rgba(255,23,68,0.0)');
+      ctx.fillStyle = grad;
+      ctx.lineTo(visiblePoints[visiblePoints.length - 1].x, pad.top + ch);
+      ctx.lineTo(visiblePoints[0].x, pad.top + ch);
+      ctx.closePath();
+      ctx.fill();
+
+      // Dots
+      visiblePoints.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = '#ff1744';
+        ctx.fill();
+      });
+
+      if (t < 1) requestAnimationFrame(draw);
+    };
+    requestAnimationFrame(draw);
+  }
+
+  drawAccessDistribution(canvas, data) {
+    const { ctx, w, h } = this.prepareCanvas(canvas);
+    const cx = w / 2, cy = h / 2;
+    const outerR = Math.min(cx, cy) - 10;
+    const innerR = outerR * 0.6;
+    const gap = 0.04;
+
+    const colors = { Admin: '#ff1744', User: '#00e5ff', Service: '#d500f9', Guest: '#00e676' };
+    const keys = Object.keys(data);
+    const total = keys.reduce((s, k) => s + data[k], 0);
+
+    let progress = 0;
+    const totalFrames = 40;
+
+    const draw = () => {
+      progress++;
+      const t = Math.min(progress / totalFrames, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
+      ctx.clearRect(0, 0, w, h);
+
+      let startAngle = -Math.PI / 2;
+      keys.forEach(key => {
+        const slice = data[key] / total;
+        const sweep = (Math.PI * 2 * slice - gap) * ease;
+        if (sweep <= 0) return;
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, outerR, startAngle, startAngle + sweep);
+        ctx.arc(cx, cy, innerR, startAngle + sweep, startAngle, true);
+        ctx.closePath();
+        ctx.fillStyle = colors[key] || '#90caf9';
+        ctx.fill();
+
+        startAngle += Math.PI * 2 * slice;
+      });
+
+      // Center text
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.font = 'bold 20px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(Math.round(total * ease), cx, cy - 5);
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.45)';
+      ctx.fillText('Active Sessions', cx, cy + 12);
+
+      if (t < 1) requestAnimationFrame(draw);
+    };
+    requestAnimationFrame(draw);
+  }
+
+  drawTrainingCompletion(canvas, data) {
+    const { ctx, w, h } = this.prepareCanvas(canvas);
+    const pad = { top: 10, right: 45, bottom: 10, left: 55 };
+    const barH = 14;
+    const spacing = 6;
+    const maxBarW = w - pad.left - pad.right;
+
+    let progress = 0;
+    const totalFrames = 40;
+
     const draw = () => {
       progress++;
       const t = Math.min(progress / totalFrames, 1);
@@ -409,7 +665,7 @@ class ChartManager {
 
         // Label
         ctx.fillStyle = 'rgba(255,255,255,0.7)';
-        ctx.font = '12px Inter, sans-serif';
+        ctx.font = '11px Inter, sans-serif';
         ctx.textAlign = 'right';
         ctx.textBaseline = 'middle';
         ctx.fillText(item.label, pad.left - 10, y + barH / 2);
@@ -417,26 +673,20 @@ class ChartManager {
         // Bar background
         ctx.fillStyle = 'rgba(255,255,255,0.06)';
         ctx.beginPath();
-        ctx.roundRect(pad.left, y, maxBarW, barH, 4);
+        ctx.roundRect(pad.left, y, maxBarW, barH, 3);
         ctx.fill();
 
-        // Bar fill gradient
+        // Bar fill
         const grad = ctx.createLinearGradient(pad.left, 0, pad.left + maxBarW, 0);
-        if (item.value < 70) {
-          grad.addColorStop(0, '#ff1744'); grad.addColorStop(1, '#ff6e40');
-        } else if (item.value < 85) {
-          grad.addColorStop(0, '#ffab00'); grad.addColorStop(1, '#ffd740');
-        } else {
-          grad.addColorStop(0, '#00e676'); grad.addColorStop(1, '#69f0ae');
-        }
+        grad.addColorStop(0, '#d500f9'); grad.addColorStop(1, '#f50057');
         ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.roundRect(pad.left, y, Math.max(0, barW), barH, 4);
+        ctx.roundRect(pad.left, y, Math.max(0, barW), barH, 3);
         ctx.fill();
 
         // Percentage
         ctx.fillStyle = 'rgba(255,255,255,0.6)';
-        ctx.font = 'bold 12px Inter, sans-serif';
+        ctx.font = 'bold 11px Inter, sans-serif';
         ctx.textAlign = 'left';
         ctx.fillText(`${Math.round(item.value * ease)}%`, pad.left + maxBarW + 8, y + barH / 2);
       });
@@ -444,6 +694,64 @@ class ChartManager {
       if (t < 1) requestAnimationFrame(draw);
     };
     requestAnimationFrame(draw);
+  }
+
+  drawLiveNetworkChart(canvas, data) {
+    if (!canvas) return;
+    const { ctx, w, h } = this.prepareCanvas(canvas);
+    const pad = { top: 10, right: 10, bottom: 15, left: 10 };
+    const cw = w - pad.left - pad.right;
+    const ch = h - pad.top - pad.bottom;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Draw grid background
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+    ctx.lineWidth = 1;
+    const cols = 8;
+    for (let i = 0; i <= cols; i++) {
+      const x = pad.left + (cw / cols) * i;
+      ctx.beginPath(); ctx.moveTo(x, pad.top); ctx.lineTo(x, pad.top + ch); ctx.stroke();
+    }
+    const rows = 4;
+    for (let i = 0; i <= rows; i++) {
+      const y = pad.top + (ch / rows) * i;
+      ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + cw, y); ctx.stroke();
+    }
+
+    const plotLine = (pointsArray, strokeColor, fillColor) => {
+      if (pointsArray.length < 2) return;
+      const maxVal = 100;
+      const points = pointsArray.map((v, i) => ({
+        x: pad.left + (i / (pointsArray.length - 1)) * cw,
+        y: pad.top + ch - (Math.min(maxVal, v) / maxVal) * ch
+      }));
+
+      // Area path
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+      ctx.lineTo(points[points.length - 1].x, pad.top + ch);
+      ctx.lineTo(points[0].x, pad.top + ch);
+      ctx.closePath();
+      ctx.fillStyle = fillColor;
+      ctx.fill();
+
+      // Line path
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+      ctx.strokeStyle = strokeColor;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    };
+
+    plotLine(data.ingress, '#00e5ff', 'rgba(0, 229, 255, 0.04)');
+    plotLine(data.egress, '#d500f9', 'rgba(213, 0, 249, 0.04)');
   }
 }
 
@@ -460,6 +768,24 @@ class DashboardApp {
       prevEvents: 0, prevAlerts: 0, prevBackup: 0, prevPatch: 0,
     };
     this.severityFilter = '24H';
+    this.vulnState = { critical: 2, high: 7, medium: 14, low: 22 };
+    this.scanHistory = [];
+    this.penTestSims = [];
+    this.threatHuntLog = [];
+    this.lastScanTimestamp = null;
+    this.lastAuditTimestamp = null;
+    this.lastHuntTimestamp = null;
+    this.liveTrafficHistory = {
+      ingress: Array.from({ length: 40 }, () => Math.floor(Math.random() * 40 + 10)),
+      egress: Array.from({ length: 40 }, () => Math.floor(Math.random() * 60 + 15)),
+    };
+    this.agentStates = [
+      { name: 'auditd', status: 'Running', cpu: 0.8, mem: 12 },
+      { name: 'edr-agent', status: 'Running', cpu: 1.2, mem: 45 },
+      { name: 'wazuh-agent', status: 'Running', cpu: 2.1, mem: 34 },
+      { name: 'clamav-daemon', status: 'Idle', cpu: 0.0, mem: 128 },
+      { name: 'snort-ids', status: 'Running', cpu: 4.8, mem: 92 },
+    ];
   }
 
   // ── Bootstrap ──────────────────────────────────────────
@@ -472,6 +798,15 @@ class DashboardApp {
     this.updateBackupStatus();
     this.updatePatchManagement();
     this.updateLogTable();
+    this.updateVulnerabilityScanning();
+    this.updateRiskAssessments();
+    this.updateAccessManagement();
+    this.updateSecurityAwarenessTraining();
+    this.updatePenTestSimLog();
+    this.updateThreatHuntLog();
+    this.updateLiveResources();
+    this.updateAgentDaemonsTable();
+    this.drawLiveNetworkChart();
     this.initSidebarNav();
     this.bindMiscEvents();
 
@@ -482,6 +817,20 @@ class DashboardApp {
     setInterval(() => this.updateBackupStatus(), 30000);
     setInterval(() => this.updatePatchManagement(), 45000);
     setInterval(() => this.refreshSeverityDonut(), 20000);
+    setInterval(() => this.updateVulnerabilityScanning(), 60000);
+    setInterval(() => this.updateAccessManagement(), 50000);
+
+    // Live Monitor updates
+    setInterval(() => {
+      this.updateLiveResources();
+      this.updateAgentDaemonsTable();
+      this.tickLiveTrafficData();
+      this.drawLiveNetworkChart();
+    }, 1000);
+
+    setInterval(() => {
+      this.pushLivePacketEvent();
+    }, 800);
   }
 
   cacheDOM() {
@@ -511,6 +860,65 @@ class DashboardApp {
       complianceChart: document.getElementById('complianceChart'),
       compliancePercent: document.getElementById('compliancePercent'),
       patchList: document.getElementById('patchList'),
+      runScanBtn: document.getElementById('runScanBtn'),
+      scanProgressContainer: document.getElementById('scanProgressContainer'),
+      scanProgressBar: document.getElementById('scanProgressBar'),
+      scanProgressText: document.getElementById('scanProgressText'),
+      vulnCritical: document.getElementById('vulnCritical'),
+      vulnHigh: document.getElementById('vulnHigh'),
+      vulnMedium: document.getElementById('vulnMedium'),
+      vulnLow: document.getElementById('vulnLow'),
+      vulnTrendChart: document.getElementById('vulnTrendChart'),
+      lastScanTime: document.getElementById('lastScanTime'),
+      hostsScanned: document.getElementById('hostsScanned'),
+      scanHistoryList: document.getElementById('scanHistoryList'),
+      overallRiskScore: document.getElementById('overallRiskScore'),
+      riskMatrix: document.getElementById('riskMatrix'),
+      riskRegister: document.getElementById('riskRegister'),
+      totalUsers: document.getElementById('totalUsers'),
+      mfaEnabled: document.getElementById('mfaEnabled'),
+      privilegedAccounts: document.getElementById('privilegedAccounts'),
+      dormantAccounts: document.getElementById('dormantAccounts'),
+      mfaPercent: document.getElementById('mfaPercent'),
+      mfaBar: document.getElementById('mfaBar'),
+      accessChart: document.getElementById('accessChart'),
+      runAuditBtn: document.getElementById('runAuditBtn'),
+      auditLog: document.getElementById('auditLog'),
+      trainingPercent: document.getElementById('trainingPercent'),
+      trainingProgress: document.getElementById('trainingProgress'),
+      trainingRingPercent: document.getElementById('trainingRingPercent'),
+      trainEnrolled: document.getElementById('trainEnrolled'),
+      trainCompleted: document.getElementById('trainCompleted'),
+      trainOverdue: document.getElementById('trainOverdue'),
+      trainingChart: document.getElementById('trainingChart'),
+      phishingCampaigns: document.getElementById('phishingCampaigns'),
+      phishPassed: document.getElementById('phishPassed'),
+      phishClicked: document.getElementById('phishClicked'),
+      phishFailed: document.getElementById('phishFailed'),
+      phishingLog: document.getElementById('phishingLog'),
+      penTestBtn: document.getElementById('startPenTestBtn'),
+      penTestTarget: document.getElementById('penTestTarget'),
+      penTestVector: document.getElementById('penTestVector'),
+      penTestConsole: document.getElementById('penTestConsole'),
+      penTestSimCount: document.getElementById('penTestSimCount'),
+      penTestLog: document.getElementById('penTestLog'),
+      penTestStatus: document.getElementById('penTestStatus'),
+      startHuntBtn: document.getElementById('startHuntBtn'),
+      huntQuery: document.getElementById('huntQuery'),
+      radarSweep: document.getElementById('radarSweep'),
+      radarStatusText: document.getElementById('radarStatusText'),
+      threatHuntCount: document.getElementById('threatHuntCount'),
+      threatHuntLog: document.getElementById('threatHuntLog'),
+      lastHuntTime: document.getElementById('lastHuntTime'),
+      cpuLoadBar: document.getElementById('cpuLoadBar'),
+      cpuLoadValue: document.getElementById('cpuLoadValue'),
+      ramUsageBar: document.getElementById('ramUsageBar'),
+      ramUsageValue: document.getElementById('ramUsageValue'),
+      agentTableBody: document.getElementById('agentTableBody'),
+      liveNetworkChart: document.getElementById('liveNetworkChart'),
+      livePacketStream: document.getElementById('livePacketStream'),
+      liveEgressRate: document.getElementById('liveEgressRate'),
+      liveIngressRate: document.getElementById('liveIngressRate'),
     };
   }
 
@@ -586,10 +994,22 @@ class DashboardApp {
     this.timelineData = this.data.generateTimelineData();
     this.severityCounts = this.data.generateSeverityCounts();
     this.complianceData = this.data.generateComplianceData();
+    this.vulnTrendData = this.data.generateVulnTrendData();
+    this.accessData = { Admin: 8, User: 110, Service: 20, Guest: 4 };
+    this.trainingData = [
+      { label: 'IT', value: 98 },
+      { label: 'Eng', value: 95 },
+      { label: 'Sales', value: 82 },
+      { label: 'HR', value: 92 },
+      { label: 'Finance', value: 88 },
+    ];
 
     if (this.dom.eventChart) this.charts.drawEventTimeline(this.dom.eventChart, this.timelineData);
     if (this.dom.severityChart) this.charts.drawSeverityDonut(this.dom.severityChart, this.severityCounts);
     if (this.dom.complianceChart) this.charts.drawComplianceBar(this.dom.complianceChart, this.complianceData);
+    if (this.dom.vulnTrendChart) this.charts.drawVulnTrend(this.dom.vulnTrendChart, this.vulnTrendData);
+    if (this.dom.accessChart) this.charts.drawAccessDistribution(this.dom.accessChart, this.accessData);
+    if (this.dom.trainingChart) this.charts.drawTrainingCompletion(this.dom.trainingChart, this.trainingData);
 
     this.updateSeverityLegend();
 
@@ -599,6 +1019,9 @@ class DashboardApp {
         if (this.dom.eventChart) this.charts.drawEventTimeline(this.dom.eventChart, this.timelineData);
         if (this.dom.severityChart) this.charts.drawSeverityDonut(this.dom.severityChart, this.severityCounts);
         if (this.dom.complianceChart) this.charts.drawComplianceBar(this.dom.complianceChart, this.complianceData);
+        if (this.dom.vulnTrendChart) this.charts.drawVulnTrend(this.dom.vulnTrendChart, this.vulnTrendData);
+        if (this.dom.accessChart) this.charts.drawAccessDistribution(this.dom.accessChart, this.accessData);
+        if (this.dom.trainingChart) this.charts.drawTrainingCompletion(this.dom.trainingChart, this.trainingData);
       }, 200);
     });
   }
@@ -826,6 +1249,291 @@ class DashboardApp {
     });
   }
 
+  // ── Vulnerability Scanning ─────────────────────────────
+  updateVulnerabilityScanning() {
+    if (this.scanHistory.length === 0) {
+      this.scanHistory = this.data.generateScanHistory();
+    }
+
+    if (this.dom.vulnCritical) this.dom.vulnCritical.textContent = this.vulnState.critical;
+    if (this.dom.vulnHigh) this.dom.vulnHigh.textContent = this.vulnState.high;
+    if (this.dom.vulnMedium) this.dom.vulnMedium.textContent = this.vulnState.medium;
+    if (this.dom.vulnLow) this.dom.vulnLow.textContent = this.vulnState.low;
+
+    if (this.dom.lastScanTime) {
+      if (!this.lastScanTimestamp) {
+        this.lastScanTimestamp = new Date(Date.now() - 4 * 3600000); // 4h ago
+      }
+      this.dom.lastScanTime.textContent = this.formatRelativeTime(this.lastScanTimestamp);
+    }
+    if (this.dom.hostsScanned) this.dom.hostsScanned.textContent = '142';
+
+    if (this.dom.scanHistoryCount) {
+      this.dom.scanHistoryCount.textContent = this.scanHistory.length;
+    }
+
+    if (this.dom.scanHistoryList) {
+      this.dom.scanHistoryList.innerHTML = this.scanHistory.map(h => {
+        const itemClass = h.status === 'passed' ? 'passed' : h.status === 'critical' ? 'critical' : 'warning';
+        return `<li class="scan-history-item">
+          <div class="scan-history-icon ${itemClass}">${h.icon}</div>
+          <div class="scan-history-info">
+            <span class="scan-history-title">${h.title}</span>
+            <span class="scan-history-detail">${h.detail}</span>
+          </div>
+          <span class="scan-history-time">${h.time}</span>
+        </li>`;
+      }).join('');
+    }
+  }
+
+  runVulnerabilityScan() {
+    if (!this.dom.runScanBtn) return;
+    const btn = this.dom.runScanBtn;
+    btn.disabled = true;
+    btn.textContent = 'Scanning…';
+    btn.classList.add('btn-working');
+
+    if (this.dom.scanProgressContainer) {
+      this.dom.scanProgressContainer.style.display = 'flex';
+    }
+    if (this.dom.scanProgressBar) this.dom.scanProgressBar.style.width = '0%';
+    if (this.dom.scanProgressText) this.dom.scanProgressText.textContent = '0%';
+
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += this.data.rand(4, 12);
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(interval);
+
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = 'Run Scan';
+          btn.classList.remove('btn-working');
+          if (this.dom.scanProgressContainer) {
+            this.dom.scanProgressContainer.style.display = 'none';
+          }
+
+          // Generate new randomized vulnerability state
+          this.vulnState = {
+            critical: this.data.rand(0, 3),
+            high: this.data.rand(2, 9),
+            medium: this.data.rand(8, 18),
+            low: this.data.rand(15, 30)
+          };
+          this.lastScanTimestamp = new Date();
+
+          // Add to scan history
+          const types = ['Internal Network Scan', 'Web Application Pentest', 'External Range Audit', 'Credentialed Host Audit'];
+          const type = this.data.randomChoice(types);
+          const totalVulns = this.vulnState.critical + this.vulnState.high + this.vulnState.medium + this.vulnState.low;
+          const status = this.vulnState.critical > 0 ? 'critical' : (this.vulnState.high > 2 ? 'warning' : 'passed');
+          const icon = status === 'passed' ? '✓' : status === 'critical' ? '✗' : '⚠';
+
+          this.scanHistory.unshift({
+            title: type,
+            detail: `142 hosts audited, ${totalVulns} issues flagged`,
+            time: 'just now',
+            status,
+            icon
+          });
+
+          this.updateVulnerabilityScanning();
+
+          // Update trend data & replot
+          this.vulnTrendData.shift();
+          this.vulnTrendData.push(totalVulns);
+          if (this.dom.vulnTrendChart) {
+            this.charts.drawVulnTrend(this.dom.vulnTrendChart, this.vulnTrendData);
+          }
+        }, 500);
+      }
+      if (this.dom.scanProgressBar) this.dom.scanProgressBar.style.width = `${progress}%`;
+      if (this.dom.scanProgressText) this.dom.scanProgressText.textContent = `${progress}%`;
+    }, 150);
+  }
+
+  // ── Risk Assessments ───────────────────────────────────
+  updateRiskAssessments() {
+    if (!this.riskRegister) {
+      this.riskRegister = [
+        { title: 'Exposed S3 Bucket containing backup logs', cat: 'Cloud Security', score: 15, sev: 'high' },
+        { title: 'Outdated TLS version (1.0) on legacy API', cat: 'Network Security', score: 8, sev: 'medium' },
+        { title: 'Unrestricted egress on dev environment', cat: 'Infrastructure', score: 12, sev: 'high' },
+        { title: 'Lack of offline backups for active directory config', cat: 'Business Continuity', score: 20, sev: 'critical' },
+        { title: 'Shared service account passwords in plaintext', cat: 'Access Control', score: 16, sev: 'critical' }
+      ];
+    }
+
+    if (this.dom.overallRiskScore) {
+      const avgScore = (this.riskRegister.reduce((sum, r) => sum + r.score, 0) / this.riskRegister.length).toFixed(1);
+      let label = 'Low';
+      let colorClass = 'text-green';
+      if (avgScore >= 16) { label = 'Critical'; colorClass = 'text-red'; }
+      else if (avgScore >= 12) { label = 'High'; colorClass = 'text-amber'; }
+      else if (avgScore >= 6) { label = 'Medium'; colorClass = 'text-cyan'; }
+
+      this.dom.overallRiskScore.textContent = `${label} (${avgScore})`;
+      this.dom.overallRiskScore.className = colorClass;
+    }
+
+    if (this.dom.openRiskCount) {
+      this.dom.openRiskCount.textContent = this.riskRegister.length;
+    }
+
+    if (this.dom.riskRegister) {
+      this.dom.riskRegister.innerHTML = this.riskRegister.map(r => {
+        return `<li class="risk-item risk-${r.sev}">
+          <div class="risk-item-info">
+            <span class="risk-item-title">${r.title}</span>
+            <span class="risk-item-category">${r.cat}</span>
+          </div>
+          <span class="risk-item-score text-${r.sev === 'critical' ? 'red' : r.sev === 'high' ? 'amber' : r.sev === 'medium' ? 'cyan' : 'green'}">${r.score}</span>
+        </li>`;
+      }).join('');
+    }
+
+    // Generate Risk Matrix cells
+    if (this.dom.riskMatrix) {
+      this.dom.riskMatrix.innerHTML = '';
+      for (let imp = 5; imp >= 1; imp--) {
+        for (let lik = 1; lik <= 5; lik++) {
+          const score = imp * lik;
+          let cellClass = 'r-low';
+          if (score >= 16) cellClass = 'r-critical';
+          else if (score >= 10) cellClass = 'r-high';
+          else if (score >= 5) cellClass = 'r-medium';
+
+          const cell = document.createElement('div');
+          cell.className = `risk-cell ${cellClass}`;
+          cell.title = `Impact: ${imp}, Likelihood: ${lik} (Score: ${score})`;
+
+          // Count matching open risks in this block
+          const count = this.riskRegister.filter(r => {
+            if (r.sev === 'critical' && score >= 16 && Math.random() > 0.8) return true;
+            if (r.sev === 'high' && score >= 10 && score < 16 && Math.random() > 0.8) return true;
+            if (r.sev === 'medium' && score >= 5 && score < 10 && Math.random() > 0.8) return true;
+            return false;
+          }).length;
+
+          cell.textContent = count > 0 ? count : '';
+          this.dom.riskMatrix.appendChild(cell);
+        }
+      }
+    }
+  }
+
+  // ── Access Management ──────────────────────────────────
+  updateAccessManagement() {
+    if (!this.auditEvents) {
+      this.auditEvents = this.data.auditEvents;
+    }
+
+    if (this.dom.totalUsers) this.dom.totalUsers.textContent = '142';
+    if (this.dom.mfaEnabled) this.dom.mfaEnabled.textContent = '135';
+    if (this.dom.privilegedAccounts) this.dom.privilegedAccounts.textContent = '8';
+    if (this.dom.dormantAccounts) this.dom.dormantAccounts.textContent = '4';
+
+    if (this.dom.mfaPercent) this.dom.mfaPercent.textContent = '95%';
+    if (this.dom.mfaBar) this.dom.mfaBar.style.width = '95%';
+
+    if (this.dom.lastAuditTime) {
+      if (!this.lastAuditTimestamp) {
+        this.lastAuditTimestamp = new Date(Date.now() - 6 * 3600000); // 6h ago
+      }
+      this.dom.lastAuditTime.textContent = this.formatRelativeTime(this.lastAuditTimestamp);
+    }
+
+    if (this.dom.auditLog) {
+      this.dom.auditLog.innerHTML = this.auditEvents.map(e => {
+        const itemClass = e.status === 'pass' ? 'audit-pass' : e.status === 'warning' ? 'audit-warning' : 'audit-fail';
+        return `<li class="audit-item ${itemClass}">
+          <div class="audit-icon">${e.icon}</div>
+          <div class="audit-content">
+            <span class="audit-title">${e.action}</span>
+            <span class="audit-detail">${e.detail} (${e.user})</span>
+          </div>
+          <span class="audit-time">just now</span>
+        </li>`;
+      }).join('');
+    }
+  }
+
+  runAccessAudit() {
+    if (!this.dom.runAuditBtn) return;
+    const btn = this.dom.runAuditBtn;
+    btn.disabled = true;
+    btn.textContent = 'Auditing…';
+    btn.classList.add('btn-working');
+
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.textContent = 'Run Audit';
+      btn.classList.remove('btn-working');
+      this.lastAuditTimestamp = new Date();
+
+      const newAuditEvents = [
+        { action: 'Audit Completed', user: 'system-audit', detail: 'Scan completed on Active Directory domain controllers', status: 'pass', icon: '✓' },
+        { action: 'Privileged Access Warning', user: 'adm-webmaster', detail: 'API token access without MFA detected', status: 'warning', icon: '⚠' }
+      ];
+
+      this.auditEvents = [...newAuditEvents, ...this.auditEvents].slice(0, 10);
+      this.updateAccessManagement();
+    }, 1200);
+  }
+
+  // ── Security Awareness Training ────────────────────────
+  updateSecurityAwarenessTraining() {
+    if (!this.phishingLog) {
+      this.phishingLog = this.data.phishingCampaignsList;
+    }
+
+    const enrolled = 250;
+    const completed = 228;
+    const overdue = 22;
+    const pct = Math.round((completed / enrolled) * 100);
+
+    if (this.dom.trainingPercent) this.dom.trainingPercent.textContent = `${pct}%`;
+    if (this.dom.trainingRingPercent) this.dom.trainingRingPercent.textContent = `${pct}%`;
+
+    if (this.dom.trainingProgress) {
+      const r = parseFloat(this.dom.trainingProgress.getAttribute('r')) || 70;
+      const circumference = 2 * Math.PI * r;
+      this.dom.trainingProgress.style.strokeDasharray = `${circumference}`;
+      const offset = circumference - (pct / 100) * circumference;
+      this.dom.trainingProgress.style.transition = 'stroke-dashoffset 1s ease';
+      this.dom.trainingProgress.style.strokeDashoffset = offset;
+    }
+
+    if (this.dom.trainEnrolled) this.dom.trainEnrolled.textContent = enrolled;
+    if (this.dom.trainCompleted) this.dom.trainCompleted.textContent = completed;
+    if (this.dom.trainOverdue) this.dom.trainOverdue.textContent = overdue;
+
+    if (this.dom.phishingCampaigns) this.dom.phishingCampaigns.textContent = this.phishingLog.length;
+
+    // Phishing stats averages
+    const avgPass = Math.round(this.phishingLog.reduce((s, c) => s + c.passPct, 0) / this.phishingLog.length);
+    const avgClick = Math.round(this.phishingLog.reduce((s, c) => s + c.clickPct, 0) / this.phishingLog.length);
+    const avgFail = Math.round(this.phishingLog.reduce((s, c) => s + c.failPct, 0) / this.phishingLog.length);
+
+    if (this.dom.phishPassed) this.dom.phishPassed.textContent = `${avgPass}%`;
+    if (this.dom.phishClicked) this.dom.phishClicked.textContent = `${avgClick}%`;
+    if (this.dom.phishFailed) this.dom.phishFailed.textContent = `${avgFail}%`;
+
+    if (this.dom.phishingLog) {
+      this.dom.phishingLog.innerHTML = this.phishingLog.map(p => {
+        return `<li class="phishing-item">
+          <div class="phishing-item-info">
+            <span class="phishing-item-title">${p.title}</span>
+            <span class="phishing-item-detail">${p.detail}</span>
+          </div>
+          <span class="phishing-item-stat text-cyan">${p.clickPct}% Click / ${p.failPct}% Harvested</span>
+        </li>`;
+      }).join('');
+    }
+  }
+
   // ── Sidebar Navigation ─────────────────────────────────
   initSidebarNav() {
     const navItems = document.querySelectorAll('[data-section]');
@@ -939,6 +1647,36 @@ class DashboardApp {
       });
     }
 
+    // Vulnerability Scan button
+    const runScanBtn = document.getElementById('runScanBtn');
+    if (runScanBtn) {
+      runScanBtn.addEventListener('click', () => {
+        this.runVulnerabilityScan();
+      });
+    }
+
+    // Access Audit button
+    const runAuditBtn = document.getElementById('runAuditBtn');
+    if (runAuditBtn) {
+      runAuditBtn.addEventListener('click', () => {
+        this.runAccessAudit();
+      });
+    }
+
+    // Penetration Testing Launch button
+    if (this.dom.penTestBtn) {
+      this.dom.penTestBtn.addEventListener('click', () => {
+        this.runPenTestSimulation();
+      });
+    }
+
+    // Threat Hunting Scan button
+    if (this.dom.startHuntBtn) {
+      this.dom.startHuntBtn.addEventListener('click', () => {
+        this.runThreatHunt();
+      });
+    }
+
     // Log source filter dropdown
     const logFilter = document.querySelector('#logSourceFilter, .log-source-filter');
     if (logFilter) {
@@ -952,6 +1690,320 @@ class DashboardApp {
         });
       });
     }
+  }
+
+  // ── Penetration Testing ───────────────────────────────
+  updatePenTestSimLog() {
+    if (!this.dom.penTestLog) return;
+    if (this.penTestSims.length === 0) {
+      this.dom.penTestLog.innerHTML = '<li class="pentest-log-placeholder">No simulations run yet. Select target and vector above to initiate.</li>';
+      if (this.dom.penTestSimCount) this.dom.penTestSimCount.textContent = '0';
+      return;
+    }
+    if (this.dom.penTestSimCount) this.dom.penTestSimCount.textContent = this.penTestSims.length;
+    this.dom.penTestLog.innerHTML = this.penTestSims.map(sim => {
+      const statusClass = sim.status.toLowerCase().includes('success') ? 'success' : 'fail';
+      return `<li class="pentest-log-item ${statusClass}">
+        <div class="pentest-log-info">
+          <span class="pentest-log-title">${this.escapeHTML(sim.vectorName)} against ${this.escapeHTML(sim.target)}</span>
+          <span class="pentest-log-meta">${this.escapeHTML(sim.status)}</span>
+        </div>
+        <span class="pentest-log-time">${this.formatRelativeTime(sim.timestamp)}</span>
+      </li>`;
+    }).join('');
+  }
+
+  runPenTestSimulation() {
+    if (!this.dom.penTestBtn || !this.dom.penTestConsole) return;
+    const target = this.dom.penTestTarget ? this.dom.penTestTarget.value : 'Target';
+    const vectorKey = this.dom.penTestVector ? this.dom.penTestVector.value : 'sql_injection';
+    const vectorSelect = this.dom.penTestVector;
+    const vectorName = vectorSelect ? vectorSelect.options[vectorSelect.selectedIndex].text : 'Vector';
+
+    const script = this.data.penTestScripts[vectorKey] || [];
+    if (script.length === 0) return;
+
+    this.dom.penTestBtn.disabled = true;
+    this.dom.penTestBtn.textContent = 'Running…';
+    this.dom.penTestBtn.classList.add('btn-working');
+    if (this.dom.penTestStatus) {
+      this.dom.penTestStatus.textContent = 'Executing Simulation';
+      this.dom.penTestStatus.className = 'text-amber';
+    }
+
+    this.dom.penTestConsole.innerHTML = '';
+    let lineIdx = 0;
+
+    const printLine = () => {
+      if (lineIdx < script.length) {
+        const line = script[lineIdx];
+        const span = document.createElement('span');
+        span.textContent = line + '\n';
+        // Add specific color highlighting for simulation messages
+        if (line.startsWith('[+]')) {
+          span.style.color = '#00ff66'; // Success green
+        } else if (line.startsWith('[!]')) {
+          span.style.color = '#ffab00'; // Warning amber
+        } else if (line.startsWith('[-]')) {
+          span.style.color = '#ff1744'; // Danger red
+        } else {
+          span.style.color = '#00ff66';
+        }
+        
+        // Remove existing cursor, append content, append new cursor
+        const cursor = this.dom.penTestConsole.querySelector('.terminal-cursor');
+        if (cursor) cursor.remove();
+        
+        this.dom.penTestConsole.appendChild(span);
+        
+        const newCursor = document.createElement('span');
+        newCursor.className = 'terminal-cursor';
+        this.dom.penTestConsole.appendChild(newCursor);
+        
+        // Scroll terminal to bottom
+        this.dom.penTestConsole.scrollTop = this.dom.penTestConsole.scrollHeight;
+
+        lineIdx++;
+        setTimeout(printLine, this.data.rand(500, 1000));
+      } else {
+        // Simulation finished
+        this.dom.penTestBtn.disabled = false;
+        this.dom.penTestBtn.textContent = 'Launch Attack';
+        this.dom.penTestBtn.classList.remove('btn-working');
+
+        const lastLine = script[script.length - 1] || '';
+        const success = lastLine.toLowerCase().includes('success');
+        
+        if (this.dom.penTestStatus) {
+          this.dom.penTestStatus.textContent = success ? 'Complete (Success)' : 'Complete (Failed)';
+          this.dom.penTestStatus.className = success ? 'text-green' : 'text-red';
+        }
+
+        // Add to completed simulations history
+        this.penTestSims.unshift({
+          target,
+          vectorKey,
+          vectorName,
+          status: success ? 'SUCCESS' : 'FAILED',
+          timestamp: new Date()
+        });
+
+        this.updatePenTestSimLog();
+      }
+    };
+
+    printLine();
+  }
+
+  // ── Threat Hunting ─────────────────────────────────────
+  updateThreatHuntLog() {
+    if (!this.dom.threatHuntLog) return;
+    if (this.dom.threatHuntCount) this.dom.threatHuntCount.textContent = this.threatHuntLog.length;
+    
+    if (this.threatHuntLog.length === 0) {
+      this.dom.threatHuntLog.innerHTML = '<li class="pentest-log-placeholder">No threat hunts completed in this session yet. Run Scan above.</li>';
+      return;
+    }
+
+    this.dom.threatHuntLog.innerHTML = this.threatHuntLog.map(threat => {
+      return `<li class="threat-hunt-item" style="border-left-color: ${threat.severity === 'critical' ? 'var(--red)' : (threat.severity === 'high' ? 'var(--amber)' : 'var(--cyan)')}">
+        <div class="threat-hunt-info">
+          <span class="threat-hunt-title">${this.escapeHTML(threat.title)}</span>
+          <span class="threat-hunt-meta">Target IP: ${this.escapeHTML(threat.ip)} — ${this.escapeHTML(threat.desc)}</span>
+        </div>
+        <span class="threat-hunt-badge badge--${threat.severity}">${this.escapeHTML(threat.severity)}</span>
+      </li>`;
+    }).join('');
+  }
+
+  runThreatHunt() {
+    if (!this.dom.startHuntBtn || !this.dom.radarSweep) return;
+    const queryKey = this.dom.huntQuery ? this.dom.huntQuery.value : 'powershell_egress';
+    const querySelect = this.dom.huntQuery;
+    const queryName = querySelect ? querySelect.options[querySelect.selectedIndex].text : 'Query';
+
+    this.dom.startHuntBtn.disabled = true;
+    this.dom.startHuntBtn.textContent = 'Hunting…';
+    this.dom.startHuntBtn.classList.add('btn-working');
+
+    if (this.dom.radarStatusText) {
+      this.dom.radarStatusText.textContent = 'Active Sweep In Progress';
+      this.dom.radarStatusText.style.color = 'var(--amber)';
+    }
+
+    // Show and trigger radar sweep rotation animation
+    this.dom.radarSweep.style.display = 'block';
+
+    // Randomly flash threat blips in the radar grid overlay
+    const blips = document.querySelectorAll('.radar-blip');
+    blips.forEach(blip => {
+      blip.classList.remove('active');
+      blip.style.opacity = '0';
+      blip.style.transform = 'scale(0)';
+      
+      // Delay blip flashes for aesthetics
+      setTimeout(() => {
+        blip.classList.add('active');
+      }, this.data.rand(200, 1800));
+    });
+
+    setTimeout(() => {
+      // Finished sweep
+      this.dom.startHuntBtn.disabled = false;
+      this.dom.startHuntBtn.textContent = 'Scan Endpoints';
+      this.dom.startHuntBtn.classList.remove('btn-working');
+      this.dom.radarSweep.style.display = 'none';
+      blips.forEach(blip => blip.classList.remove('active'));
+
+      this.lastHuntTimestamp = new Date();
+      if (this.dom.lastHuntTime) {
+        this.dom.lastHuntTime.textContent = this.formatRelativeTime(this.lastHuntTimestamp);
+      }
+
+      // Query mock threat records from the dataset
+      const results = this.data.threatHuntData[queryKey] || [];
+      if (results.length > 0) {
+        if (this.dom.radarStatusText) {
+          this.dom.radarStatusText.textContent = `${results.length} IOC Threats Found`;
+          this.dom.radarStatusText.style.color = 'var(--red)';
+        }
+
+        // Add new threats to log
+        results.forEach(res => {
+          // Avoid duplicate entries of the same threat
+          if (!this.threatHuntLog.some(t => t.title === res.title && t.ip === res.ip)) {
+            this.threatHuntLog.unshift({
+              ...res,
+              timestamp: new Date()
+            });
+          }
+        });
+      } else {
+        if (this.dom.radarStatusText) {
+          this.dom.radarStatusText.textContent = 'Endpoints Verified Clean';
+          this.dom.radarStatusText.style.color = 'var(--green)';
+        }
+      }
+
+      this.updateThreatHuntLog();
+    }, 3000);
+  }
+
+  escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&<>'"]/g, 
+      tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+    );
+  }
+
+  // ── Live Security & System Monitor ─────────────────────
+  updateLiveResources() {
+    const cpu = this.data.rand(25, 75);
+    const ram = this.data.rand(45, 85);
+
+    if (this.dom.cpuLoadBar) this.dom.cpuLoadBar.style.width = `${cpu}%`;
+    if (this.dom.cpuLoadValue) this.dom.cpuLoadValue.textContent = `${cpu}%`;
+    if (this.dom.ramUsageBar) this.dom.ramUsageBar.style.width = `${ram}%`;
+    if (this.dom.ramUsageValue) this.dom.ramUsageValue.textContent = `${ram}%`;
+  }
+
+  updateAgentDaemonsTable() {
+    if (!this.dom.agentTableBody) return;
+
+    this.agentStates = this.agentStates.map(agent => {
+      let status = agent.status;
+      if (Math.random() > 0.90 && agent.name !== 'snort-ids' && agent.name !== 'wazuh-agent') {
+        status = status === 'Running' ? 'Idle' : (status === 'Idle' ? 'Verifying' : 'Running');
+      }
+
+      let cpu = agent.cpu;
+      let mem = agent.mem;
+
+      if (status === 'Running') {
+        cpu = Math.max(0.2, (cpu + (Math.random() - 0.5) * 0.4)).toFixed(1);
+        mem = Math.max(10, Math.round(mem + (Math.random() - 0.5) * 4));
+      } else if (status === 'Verifying') {
+        cpu = Math.max(1.5, (cpu + (Math.random() - 0.5) * 0.8)).toFixed(1);
+        mem = Math.max(20, Math.round(mem + (Math.random() - 0.5) * 8));
+      } else {
+        cpu = '0.0';
+      }
+
+      return { ...agent, status, cpu, mem };
+    });
+
+    this.dom.agentTableBody.innerHTML = this.agentStates.map(agent => {
+      let statusBadgeClass = 'healthy';
+      if (agent.status === 'Idle') statusBadgeClass = 'warning';
+      if (agent.status === 'Verifying') statusBadgeClass = 'info';
+
+      return `<tr>
+        <td style="font-family: monospace; font-weight: 600; color: var(--text-primary)">${agent.name}</td>
+        <td><span class="status-badge status-badge--${statusBadgeClass}">${agent.status}</span></td>
+        <td style="font-variant-numeric: tabular-nums">${agent.cpu}%</td>
+        <td style="font-variant-numeric: tabular-nums">${agent.mem} MB</td>
+      </tr>`;
+    }).join('');
+  }
+
+  tickLiveTrafficData() {
+    const ingressVal = Math.floor(Math.random() * 40 + 10);
+    const egressVal = Math.floor(Math.random() * 60 + 15);
+
+    this.liveTrafficHistory.ingress.shift();
+    this.liveTrafficHistory.ingress.push(ingressVal);
+
+    this.liveTrafficHistory.egress.shift();
+    this.liveTrafficHistory.egress.push(egressVal);
+
+    if (this.dom.liveIngressRate) this.dom.liveIngressRate.textContent = `${ingressVal} Mbps`;
+    if (this.dom.liveEgressRate) this.dom.liveEgressRate.textContent = `${egressVal} Mbps`;
+  }
+
+  drawLiveNetworkChart() {
+    if (this.dom.liveNetworkChart) {
+      this.charts.drawLiveNetworkChart(this.dom.liveNetworkChart, this.liveTrafficHistory);
+    }
+  }
+
+  pushLivePacketEvent() {
+    if (!this.dom.livePacketStream) return;
+
+    const verbs = ['ALLOW', 'ALLOW', 'BLOCKED', 'ALLOW', 'MITIGATED'];
+    const protocols = ['TCP', 'UDP', 'HTTPS', 'SSH', 'ICMP', 'DNS'];
+    const services = { TCP: 80, UDP: 53, HTTPS: 443, SSH: 22, ICMP: 8, DNS: 53 };
+
+    const verb = this.data.randomChoice(verbs);
+    const proto = this.data.randomChoice(protocols);
+    const port = services[proto] || this.data.rand(1024, 65535);
+
+    const srcIP = this.data.randomIP();
+    const destIP = this.data.randomIP();
+    const bytes = this.data.rand(40, 1500);
+
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    
+    let color = '#00ff66';
+    if (verb === 'BLOCKED') color = '#ff1744';
+    if (verb === 'MITIGATED') color = '#ffab00';
+
+    const logLine = `[${timeStr}] <span style="color:${color}; font-weight:bold">${verb}</span> ${proto} ${srcIP}:${this.data.rand(3000, 60000)} -> ${destIP}:${port} (${bytes} bytes)\n`;
+
+    const consoleEl = this.dom.livePacketStream;
+    const isFirst = consoleEl.innerHTML.includes('Initializing raw packet syslog stream...');
+    if (isFirst) {
+      consoleEl.innerHTML = logLine;
+    } else {
+      consoleEl.innerHTML += logLine;
+    }
+
+    const lines = consoleEl.innerHTML.split('\n');
+    if (lines.length > 50) {
+      consoleEl.innerHTML = lines.slice(lines.length - 50).join('\n');
+    }
+
+    consoleEl.scrollTop = consoleEl.scrollHeight;
   }
 
   // ── Utilities ──────────────────────────────────────────
