@@ -121,7 +121,7 @@ This project requires zero package compilation, initialization tasks, or server 
 
 1. **Clone the Architecture:**
 ```bash
-git clone https://github.com/your-username/unified-soc-suite.git
+https://github.com/jatinshah480-netizen/cyber-soc-dashboard/tree/main
 cd unified-soc-suite
 
 ```
