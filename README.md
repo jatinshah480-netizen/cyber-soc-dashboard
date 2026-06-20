@@ -1,95 +1,60 @@
-# 🛡️ Advanced Security Operations Center & Cybersecurity Mission Control
+# 🛡️ Cyber SOC Dashboard
 
-An enterprise-grade, real-time **Security Operations Center (SOC) Console** combined with an interactive **Cybersecurity Mission Control & Training Hub**. This fully unified, frameworkless suite is engineered entirely using **pure vanilla JavaScript, HTML5 Canvas, and modern CSS3**, providing a rich interactive playground for security telemetry, offensive attack simulation, and defensive incident response validation without third-party chart engines or dependencies.
+A real-time **Security Operations Center (SOC) console** combined with an interactive **Cybersecurity Training Hub**. Built entirely with **vanilla JavaScript, HTML5 Canvas, and CSS3** — no frameworks, no chart libraries, no dependencies. The goal was to understand SOC operations and core security concepts deeply enough to model their logic in working code, not just read about them.
 
-The platform effectively bundles two interconnected architectures into a single, seamless product ecosystem.
+The project bundles two connected modules into one suite.
 
 ---
 
-## 🎨 System Architecture Overview
-
-The codebase is split logically between an active network-wide monitoring node and a structured, hands-on operator simulation lab.
+## 🎨 Architecture
 
 ```bash
-├── index.html            # Core SOC Monitoring Dashboard interface[cite: 10]
-├── index.css             # Root dark-cyberpunk glassmorphic layout tokens[cite: 9]
-├── app.js                # SOC background simulation loops, metrics, and canvas drawing engine[cite: 4]
+├── index.html            # SOC monitoring dashboard
+├── index.css             # Dark glassmorphic dashboard layout
+├── app.js                # SOC simulation loops, metrics, canvas rendering engine
 │
-├── cybersecurity.html    # Interactive Cybersecurity Training Center module[cite: 5]
-├── cyber-tasks.css       # Neon structural design stylesheets, hero vectors, and fluid parallax paths[cite: 6, 7]
-└── cyber-tasks.js        # Mission Control task validation algorithms and logic handler
-
+├── cybersecurity.html    # Cybersecurity training center
+├── cyber-tasks.css       # Training center styling and layout
+└── cyber-tasks.js        # Mission task logic and validation
 ```
 
 ---
 
-## 🚀 Core Subsystem Features
+## 🚀 Core Features
 
-### 1. Live SOC Monitoring Console (`index.html` & `app.js`)
+### 1. Live SOC Monitoring Console (`index.html` + `app.js`)
 
-* **Procedural Telemetry Engine (`DataEngine`):** Live model generating randomized proxy logs, integrity alerts, credential mutations, intrusion indicators, and system diagnostic records.
+- **Telemetry Engine:** Generates simulated proxy logs, integrity alerts, credential anomalies, and intrusion indicators in real time
+- **Canvas-based Analytics:** Custom-built charts (no chart library) for a rolling 24-hour event timeline, severity queues, and asset compliance status
+- **Live Traffic & Health Ticker:** Streaming ingress/egress traffic chart alongside simulated service health monitors (`snort-ids`, `wazuh-agent`, etc.)
+- **Offensive Testing Playground:** An interactive terminal simulating red-team scenarios (SQL injection, RCE exploitation, credential stuffing) paired with an IOC (Indicator of Compromise) scanner
 
+### 2. Cybersecurity Training Center (`cybersecurity.html` + `cyber-tasks.js`)
 
-* **Zero-Dependency Performance Analytics (`ChartManager`):** Utilizes direct HTML5 Canvas geometric mappings and Bezier curves to chart a rolling 24-Hour Event Timeline, Severity queues, and dynamic Asset Compliance maps.
-
-
-* **Live Traffic Ingestion & Health Ticker:** Streams an ongoing area chart plotting incoming ingress and egress packet thresholds alongside native resource monitors tracking system daemons (`snort-ids`, `wazuh-agent`, etc.).
-
-
-* **Offensive Testing Playground:** Simulates realistic red-team pipelines directly inside an interactive, printing terminal window (SQL Injections, Apache RCE exploits, Credential Stuffing) coupled with an endpoint radar scanner checking for latent Indicators of Compromise (IOCs).
-
-
-
-### 2. Cybersecurity Training Center (`cybersecurity.html` & `cyber-tasks.js`)
-
-* **OP-01 Log Triage Lab:** Analyzes raw SIEM dump telemetry to correctly identify and check ongoing attacks.
-
-
-* **OP-02 Vulnerability Lifecycle:** Executes network scanner evaluations and accurately matches discovered CVE indexes with production-safe vendor patches.
-
-
-* **OP-03 Sequential Incident Response:** A real-time incident controller that tests speed and sequence protocols to lock out accounts, block payloads, and securely restore corrupted segments from offline backups before threat spread factors break network thresholds.
-
-
-* **OP-04 Identity Governance:** Enforces access management audits against privilege inflation threats, toggling Multi-Factor Authentication (MFA) mandates or issuing directory suspensions against high-risk contractor assets.
-
-
-* **OP-05 Phishing Triage Simulator:** An inbound mail queue audit suite designed to analyze sender authentication vectors and hover link tooltips to expose social engineering templates.
-
-
-* **Verifiable Specialist Certification:** A dynamic script validation loop assessing task variables across all 5 operational exercises to generate and print a customized graduation layout.
-
-
+- **OP-01 — Log Triage:** Analyze raw SIEM log data to identify active attacks
+- **OP-02 — Vulnerability Management:** Match discovered CVEs to the correct vendor patches
+- **OP-03 — Incident Response:** Sequence-based simulator for containing breaches — lock accounts, block payloads, and restore from backup within a time threshold
+- **OP-04 — Identity Governance:** Enforce MFA policies and suspend high-risk contractor accounts to prevent privilege misuse
+- **OP-05 — Phishing Triage:** Inspect sender authentication and links to identify social-engineering attempts
+- **Certification:** Tracks performance across all 5 modules and generates a completion summary
 
 ---
 
-## 🛠️ Unified Technical Stack
+## 🛠️ Tech Stack
 
-| System Layer | Technical Framework |
-| --- | --- |
-| **Execution Layer** | Strict Object-Oriented Vanilla ES6+ JavaScript (Zero external scripts or node modules).
-
- |
-| **Graphics Middleware** | HTML5 Native Canvas API using low-level dynamic render context paths.
-
- |
-| **Interface Blueprint** | Semantic HTML5 Mock Structures & Responsive Vector Graphics.
-
- |
-| **Styling Paradigm** | Flexbox & CSS Grid, Glassmorphism, root UI token custom properties, localized scrollbars.
-
- |
-| **Typography Framework** | Google Inter Display and monospace terminal families.
-
- |
+| Layer | Technology |
+|---|---|
+| Logic | Vanilla ES6+ JavaScript (no external libraries) |
+| Graphics | HTML5 Canvas API |
+| Structure | Semantic HTML5 |
+| Styling | CSS Grid, Flexbox, glassmorphism, CSS custom properties |
+| Typography | Inter (UI), monospace (terminal) |
 
 ---
 
-## 📈 System Optimizations
+## ⚙️ Implementation Notes
 
-### ⚡ Retina-Crisp Canvas Scalers
-
-The canvas layouts adapt automatically to rich viewport setups (DPI/Retina monitors) by actively pulling physical bounding rect constraints against structural device pixel parameters before resetting context factors:
+**Retina/DPI-aware canvas scaling:**
 
 ```javascript
 const dpr = window.devicePixelRatio || 1;
@@ -97,46 +62,33 @@ const rect = canvas.getBoundingClientRect();
 canvas.width = rect.width * dpr;
 canvas.height = rect.height * dpr;
 ctx.scale(dpr, dpr);
-
 ```
 
-### ⏱️ Staggered Non-Blocking Performance Matrix
+**Independent update intervals** to keep telemetry simulation decoupled from rendering performance:
 
-Update threads run asynchronously on isolated interval timers to decouple telemetry overhead from core frame rendering timelines:
-
-* **Live Bandwidth Traffic Ticks:** Refreshes dynamically every `1,000ms`
-
-* **KPI Telemetry Cards:** Synchronizes globally every `10,000ms`
-
-* **Network Chronograph Timelines:** Renders area structures every `15,000ms`
-
-* **Patch Queue Engine Compliance:** Evaluates missing packages every `45,000ms`
-
+- Live traffic ticker — every 1s
+- KPI cards — every 10s
+- Event timeline — every 15s
+- Patch compliance check — every 45s
 
 ---
 
-## ⚙️ Quick Start
+## 🚀 Quick Start
 
-This project requires zero package compilation, initialization tasks, or server dependencies.
+No build step, no dependencies, no server required.
 
-1. **Clone the Architecture:**
 ```bash
-https://github.com/jatinshah480-netizen/cyber-soc-dashboard/tree/main
-cd unified-soc-suite
-
+git clone https://github.com/jatinshah480-netizen/cyber-soc-dashboard.git
+cd cyber-soc-dashboard
 ```
 
+Then either:
+- Open `index.html` directly in any modern browser to view the SOC dashboard, and use the sidebar **"Mission Control"** link to open the training hub (`cybersecurity.html`)
 
-
+- Or serve it locally:
+```bash
+python -m http.server 8080
+# or
+npx serve .
 ```
-2.  **Launch Ecosystem Viewports:**
-    *   Open `index.html` inside any modern browser to track live operational logs[cite: 10].
-    *   Navigate to the lower menu block inside the sidebar nav layout and click **"Mission Control"** to immediately split out and launch the standalone training room simulator (`cybersecurity.html`)[cite: 10].
-    *   *Alternatively, easily launch via light local HTTP web servers for developer environment tracking:*
-        ```bash
-        # Python 3 Environments
-        python -m http.server 8080
-        
-        # Node NPM Ecosystems
-        npx serve .
 
